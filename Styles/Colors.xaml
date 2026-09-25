@@ -1,0 +1,50 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <SolidColorBrush x:Key="PrimaryTextColor"
+                 Color="#E8E8E8"/>
+    <SolidColorBrush x:Key="SecondaryTextColor"
+                 Color="#DFDFDF"/>
+    <SolidColorBrush x:Key="TertiaryTextColor"
+                 Color="#A8A8A8"/>
+    <SolidColorBrush x:Key="DisabledTextColor"
+                 Color="#400"/>
+    <SolidColorBrush x:Key="LinkColorText"
+                 Color="#007AFF"/>
+    <SolidColorBrush x:Key="ErrorTextColor"
+                 Color="#D05D7C"/>
+    <SolidColorBrush x:Key="SuccessTextColor"
+                 Color="#5A9300"/>
+    <SolidColorBrush x:Key="WarningTextColor"
+                 Color="#F4B509"/>
+    <FontFamily x:Key="PrimaryFont">Inter</FontFamily>
+    <sys:Double x:Key="BodyLarge">18</sys:Double>
+    <sys:Double x:Key="BodyMedium">16</sys:Double>
+    <sys:Double x:Key="BodySmall">14</sys:Double>
+    <FontWeight x:Key="BoldText">Bold</FontWeight>
+    <FontWeight x:Key="RegularWeight">Regular</FontWeight>
+
+    <Style x:Key="XLText"
+   TargetType="TextBlock">
+        <Setter Property="FontFamily"
+        Value="Inter"></Setter>
+        <Setter Property="FontWeight"
+        Value="Bold"/>
+        <Setter Property="FontSize"
+            Value="20"/>
+        <Setter Property="Foreground"
+        Value="{StaticResource PrimaryTextColor}"/>
+    </Style>
+
+    <Style x:Key="Bodylarge"
+       TargetType="TextBlock">
+        <Setter Property="FontFamily"
+            Value="Inter"/>
+        <Setter Property="FontWeight"
+            Value="{DynamicResource BoldText}"/>
+        <Setter Property="FontSize"
+            Value="{DynamicResource BodyMedium}"/>
+        <Setter Property="Foreground"
+            Value="{StaticResource PrimaryTextColor}"/>
+    </Style>
+</ResourceDictionary>

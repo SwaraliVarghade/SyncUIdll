@@ -1,0 +1,789 @@
+<UserControl x:Class="SyncUI.SyncViewUI"
+             xmlns:controls ="clr-namespace:SyncUI.Controls"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <ScrollViewer x:Name="MainScrollViewer"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  CanContentScroll="False">
+        <ScrollViewer.Resources>
+            <Style TargetType="ScrollBar"
+                   BasedOn="{StaticResource RWVerticalScrollBar}"/>
+        </ScrollViewer.Resources>
+        <StackPanel>
+
+            <Border BorderBrush="#424242"
+                    Padding="10"
+                    Margin="0,0,0,0">
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="34"/>
+                        <RowDefinition Height="34"/>
+                        <RowDefinition Height="34"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="95"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Hub Config"
+                               Style="{StaticResource Bodylarge}"/>
+
+                    <TextBlock Grid.Row="1"
+                               Text="API Key"
+                               FontSize="{StaticResource BodyMedium}"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               VerticalAlignment="Center"/>
+
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="38"/>
+                            <ColumnDefinition Width="10"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding apiKey}"
+                                 IsEnabled="{Binding IsApiKeyEnabled}"
+                                 Cursor="IBeam"
+                                 CaretBrush="White"
+                                 VerticalAlignment="Center"
+                                 Background="Transparent"
+                                 BorderBrush="#424242"
+                                 Foreground="{StaticResource PrimaryTextColor}"
+                                 FontSize="{StaticResource BodySmall}"
+                                 Height="25" Margin="-11,5,-70,4"/>
+                        <Button Grid.Column="1"
+                            Width="20"
+                            Height="20"
+                            Background="Transparent"
+                            BorderThickness="1"
+                            Padding="0"
+                            Margin="0,5,-150,4"
+                            IsEnabled="{Binding IsVerifyButtonEnabled}"
+                            Command="{Binding AddApi}">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="15">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Image Height="16"
+                                   Width="16"
+                                   Cursor="Hand"
+                                   Source="{Binding CheckButtonImageSource}"/>        
+                        </Button>
+                        <Button Grid.Column="2"
+                            Width="20"
+                            Height="20"
+                            Background="Transparent"
+                            BorderThickness="1"
+                            Margin="-10,5,-150,4"
+                            Command="{Binding EnableAddModeCommand}">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        CornerRadius="15">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Image Height="13"
+                                   Width="13"
+                                   Cursor="Hand"
+                                   Source="/Assets/add-rwlink.png"/>        
+                        </Button>
+                        <Button Grid.Column="3"
+                            Width="20"
+                            Height="20"
+                            Background="Transparent"
+                            BorderThickness="1"
+                            Margin="-10,5,-150,4"
+                            Command="{Binding CancelAddModeCommand}">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        CornerRadius="15">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Image Height="16"
+                                   Width="16"
+                                   Cursor="Hand"
+                                   Source="/Assets/close-rwlink.png"/>        
+                        </Button>
+                    </Grid>
+
+                    <TextBlock Grid.Row="2"
+                               FontSize="{StaticResource BodySmall}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               Text="ID"
+                               VerticalAlignment="Center"/>
+
+                    <ComboBox ItemsSource="{Binding MerchantIDs}"
+                          IsEnabled="{Binding IsDropDownEnabled}"
+                          Style="{StaticResource RWComboBox}"
+                          Grid.Row="2"
+                          Grid.ColumnSpan="2" 
+                          Margin="84,4,0,0" 
+                          VerticalAlignment="Top" />        
+
+                    <TextBlock Grid.Row="3"
+                               FontSize="{StaticResource BodySmall}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               Text="Location"
+                               VerticalAlignment="Center"/>
+
+                    <ComboBox ItemsSource="{Binding StoreNames}"
+                              IsEnabled="{Binding IsDropDownEnabled}"
+                              Style="{StaticResource RWComboBox}"
+                              Grid.Row="3"
+                              Grid.ColumnSpan="2" 
+                              Margin="84,4,0,0" 
+                              VerticalAlignment="Top" />        
+                </Grid>
+            </Border>
+
+            <StackPanel Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <Border BorderBrush="#424242"
+                    Padding="10"
+                    BorderThickness="0,1, 0, 0"
+                    Margin="0">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Data Sync"
+                               Style="{StaticResource Bodylarge}"
+                               Margin="0,0,0,10"/>
+
+                        <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                Margin="0, 8">
+
+                            <RadioButton x:Name="FileRadioButton"
+                                     Content="File"
+                                         IsChecked="True"
+                                     GroupName="DataSync"
+                                     FontSize="{StaticResource BodySmall}"
+                                     Margin="0,0,18,0">
+                                <RadioButton.Style>
+                                    <Style TargetType="RadioButton"
+                                    BasedOn="{StaticResource ModernRadioButton}">
+                                        <Setter Property="IsChecked" Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DataUploadType}" Value="File">
+                                                <Setter Property="IsChecked" Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </RadioButton.Style>
+                            </RadioButton>
+
+                            <RadioButton x:Name="DatabaseRadioButton"
+                                     Content="Database"
+                                     GroupName="DataSync"
+                                     FontSize="{StaticResource BodySmall}"
+                                     Margin="0,0,18,0">
+                                <RadioButton.Style>
+                                    <Style TargetType="RadioButton"
+                                    BasedOn="{StaticResource ModernRadioButton}">
+                                        <Setter Property="IsChecked" Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DataUploadType}" Value="Database">
+                                                <Setter Property="IsChecked" Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </RadioButton.Style>
+                            </RadioButton>
+
+                            <RadioButton x:Name="WebServiceRadioButton"
+                                     Content="Webservice"
+                                     FontSize="{StaticResource BodySmall}"
+                                     GroupName="DataSync"
+                                     Margin="0,0,18,0">
+                                <RadioButton.Style>
+                                    <Style TargetType="RadioButton"
+                                    BasedOn="{StaticResource ModernRadioButton}">
+                                        <Setter Property="IsChecked" Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DataUploadType}" Value="Webservice">
+                                                <Setter Property="IsChecked" Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </RadioButton.Style>
+                            </RadioButton>
+
+                        </StackPanel>
+
+                        <CheckBox Content="Replace data on server"
+                              IsChecked="False"
+                              Foreground="{StaticResource PrimaryTextColor}"
+                              FontFamily="{StaticResource PrimaryFont}"
+                              FontSize="{StaticResource BodySmall}"
+                              Style="{StaticResource ModernCheckBox}"
+                              Margin="5,10,0,0"/>
+
+                        <CheckBox Content="Manul Sync"
+                              IsChecked="False"
+                              Foreground="{StaticResource PrimaryTextColor}"
+                              FontFamily="{StaticResource PrimaryFont}"
+                              FontSize="{StaticResource BodySmall}"
+                              Style="{StaticResource ModernCheckBox}"
+                              Margin="5,10,0,0"/>
+
+                        <CheckBox Content="RFID Decryption"
+                              IsChecked="False"
+                              Foreground="{StaticResource PrimaryTextColor}"
+                              FontFamily="{StaticResource PrimaryFont}"
+                              FontSize="{StaticResource BodySmall}"
+                              Style="{StaticResource ModernCheckBox}"
+                              Margin="5,10,0,0"/>
+
+                        <Grid
+                        VerticalAlignment="Center"
+                        Margin="0,10,0,-10">
+                            <TextBlock
+                           Foreground="{StaticResource PrimaryTextColor}"
+                           FontFamily="{StaticResource PrimaryFont}"
+                           FontSize="{StaticResource BodySmall}"
+                           Text="Decryption Feild"
+                           VerticalAlignment="Center"/>
+
+                            <TextBox 
+                             BorderBrush="#424242"    
+                             Background="Transparent"
+                             Foreground="White"
+                             Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+                        </Grid>
+
+                    </StackPanel>
+
+                </Border>
+
+                <Border BorderBrush="#424242"
+                    Padding="0,10"
+                    Margin="12, 12, 12, 0"
+                        BorderThickness="0, 1, 0, 0">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=FileRadioButton}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="File Details"
+                               Style="{StaticResource Bodylarge}" Grid.ColumnSpan="2" Margin="0,0,137,0"/>
+
+                        <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Foreground="{StaticResource PrimaryTextColor}"
+                           FontFamily="{StaticResource PrimaryFont}"
+                           FontSize="{StaticResource BodySmall}"
+                           Text="Folder path"
+                           VerticalAlignment="Center"/>
+
+                        <Grid Grid.Row="1"
+                          Grid.Column="1"
+                          Margin="5,4,0,4">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="205"/>
+                                <ColumnDefinition Width="35"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Selected folder path -->
+                            <TextBox Grid.Column="0"
+                                 Height="25"
+                                 BorderBrush="#424242"
+                                 Background="Transparent"
+                                 Foreground="White"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding FolderPath, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <!-- Browse button -->
+                            <Button Grid.Column="1"
+                                Width="25"
+                                Height="25"
+                                Margin="0,0,0,0"
+                                Content="..."
+                                    BorderBrush="#424242"
+                                Command="{Binding BrowseFolderCommand}"
+                                Background="Transparent"
+                                Foreground="{StaticResource PrimaryTextColor}"/>
+                        </Grid>
+
+                        <TextBlock Grid.Row="2"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="{StaticResource BodySmall}"
+                               Text="File name"
+                               VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="2"
+                         BorderBrush="#424242"    
+                         Background="Transparent"
+                         Foreground="White"
+                         Height="25" Grid.ColumnSpan="2" Margin="84,4,0,4"/>
+
+                    </Grid>
+
+                </Border>
+
+                <Border BorderBrush="#424242"
+                    Padding="0,10"
+                    Margin="12, 12, 12, 0"
+                        BorderThickness="0, 1, 0, 0">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=DatabaseRadioButton}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Database Details"
+                               Style="{StaticResource Bodylarge}" Grid.ColumnSpan="2" Margin="0,0,137,0"/>
+
+                        <TextBlock Grid.Row="1"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="{StaticResource BodySmall}"
+                               Text="Host Name"
+                               VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="1"
+                             BorderBrush="#424242"
+                            Background="Transparent"
+                             Foreground="White"
+                         Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+
+                        <TextBlock Grid.Row="2"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="{StaticResource BodySmall}"
+                               Text="Port"
+                               VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="2"
+                         BorderBrush="#424242"    
+                         Background="Transparent"
+                         Foreground="White"
+                         Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+
+                        <TextBlock Grid.Row="3"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="{StaticResource BodySmall}"
+                               Text="Username"
+                               VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="3"
+                         BorderBrush="#424242"    
+                         Background="Transparent"
+                         Foreground="White"
+                         Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+
+                        <TextBlock Grid.Row="4"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="{StaticResource BodySmall}"
+                               Text="Password"
+                               VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="4"
+                         BorderBrush="#424242"    
+                         Background="Transparent"
+                         Foreground="White"
+                         Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+                        <TextBlock Grid.Row="5"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="{StaticResource BodySmall}"
+                               Text="Store Code"
+                               VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="5"
+                         BorderBrush="#424242"    
+                         Background="Transparent"
+                         Foreground="White"
+                         Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+
+                        <TextBlock Grid.Row="6"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="{StaticResource BodySmall}"
+                               Text="Custom Feilds"
+                               VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="6"
+                         BorderBrush="#424242"    
+                         Background="Transparent"
+                         Foreground="White"
+                         Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+
+                    </Grid>
+
+                </Border>
+                <Border BorderBrush="#424242"
+                    Padding="0,10"
+                    Margin="12, 12, 12, 0"
+                    BorderThickness="0, 1, 0, 0">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=WebServiceRadioButton}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="34"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Web Service Details"
+                            Style="{StaticResource Bodylarge}" Grid.ColumnSpan="2" Margin="0,0,137,0"/>
+
+                        <TextBlock Grid.Row="1"
+                           Foreground="{StaticResource PrimaryTextColor}"
+                           FontFamily="{StaticResource PrimaryFont}"
+                           FontSize="{StaticResource BodySmall}"
+                           Text="Authentication URL"
+                           VerticalAlignment="Center"/>     
+
+                        <TextBox Grid.Row="1"
+                             BorderBrush="#424242"
+                             Background="Transparent"
+                             Foreground="White"
+                             Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+
+                        <TextBlock Grid.Row="2"
+                           Foreground="{StaticResource PrimaryTextColor}"
+                           FontFamily="{StaticResource PrimaryFont}"
+                           FontSize="{StaticResource BodySmall}"
+                           Text="User Name"
+                           VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="2"
+                             BorderBrush="#424242"    
+                             Background="Transparent"
+                             Foreground="White"
+                             Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+
+                        <TextBlock Grid.Row="3"
+                            Foreground="{StaticResource PrimaryTextColor}"
+                            FontFamily="{StaticResource PrimaryFont}"
+                            FontSize="{StaticResource BodySmall}"
+                            Text="Password"
+                            VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="3"
+                             BorderBrush="#424242"    
+                             Background="Transparent"
+                             Foreground="White"
+                             Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+
+                        <TextBlock Grid.Row="4"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="{StaticResource BodySmall}"
+                               Text="Store Code"
+                               VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="4"
+                             BorderBrush="#424242"    
+                             Background="Transparent"
+                             Foreground="White"
+                             Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+                        <TextBlock Grid.Row="5"
+                           Foreground="{StaticResource PrimaryTextColor}"
+                           FontFamily="{StaticResource PrimaryFont}"
+                           FontSize="{StaticResource BodySmall}"
+                           Text="Web Service URL"
+                           VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="5"
+                             BorderBrush="#424242"    
+                             Background="Transparent"
+                             Foreground="White"
+                             Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+
+                        <TextBlock Grid.Row="6"
+                           Foreground="{StaticResource PrimaryTextColor}"
+                           FontFamily="{StaticResource PrimaryFont}"
+                           FontSize="{StaticResource BodySmall}"
+                           Text="Custom Feilds"
+                           VerticalAlignment="Center"/>     
+
+                        <TextBox Grid.Row="6"
+                             BorderBrush="#424242"    
+                             Background="Transparent"
+                             Foreground="White"
+                             Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+                    </Grid>
+                </Border>
+
+                <Border
+                Padding="10, 0, 10, 10"
+                Margin="0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button
+                           Grid.Column="0"
+                            Width="80"
+                            Height="30"
+                                HorizontalAlignment="Right"
+                            Command="{Binding ShowMsg}">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource BlueButton}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=DatabaseRadioButton}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <controls:IconStyle
+                                IconSource="/Assets/resync-save-rwlink.png"
+                                ButtonText="Test"/>
+                        </Button>
+                        <Button
+                           Grid.Column="1"
+                            Width="160"
+                            Height="30"
+                                HorizontalAlignment="Right"
+                            Style="{StaticResource BlueButton}"
+                            Command="{Binding ShowMsg}">
+                            <controls:IconStyle
+                                IconSource="/Assets/resync-save-rwlink.png"
+                                ButtonText="Save &amp; Data Sync"/>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <Border BorderBrush="#424242"
+                        BorderThickness="0,1, 0, 0"
+                        Padding="10">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Image Sync" Style="{StaticResource Bodylarge}"/>
+
+                        <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Margin="0,8">
+                            <!-- Local File -->
+                            <RadioButton Content="Local File"
+                             GroupName="ImageSyncType"
+                             FontSize="{StaticResource BodySmall}"
+                             Margin="0,0,18,0">
+                                <RadioButton.Style>
+                                    <Style TargetType="RadioButton"
+                                        BasedOn="{StaticResource ModernRadioButton}">
+                                        <Setter Property="IsChecked" Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ImageSyncType}" Value="Local File">
+                                                <Setter Property="IsChecked" Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </RadioButton.Style>
+                            </RadioButton>
+
+                            <!-- FTP -->
+                            <RadioButton Content="FTP"
+                             GroupName="FileType"
+                             FontSize="{StaticResource BodySmall}"
+                             Margin="0,0,18,0">
+                                <RadioButton.Style>
+                                    <Style TargetType="RadioButton" BasedOn="{StaticResource ModernRadioButton}">
+                                        <Setter Property="IsChecked" Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ImageSyncType}"
+                                             Value="FTP">
+                                                <Setter Property="IsChecked" Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </RadioButton.Style>
+                            </RadioButton>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock 
+                                Text="Image Lookup"
+                                FontFamily="{StaticResource PrimaryFont}"
+                                FontSize="{StaticResource BodyMedium}"
+                                Foreground="{StaticResource PrimaryTextColor}"/>
+                            <CheckBox Content="Image from G Drive"
+                                  IsChecked="False"
+                                  Foreground="{StaticResource PrimaryTextColor}"
+                                  FontFamily="{StaticResource PrimaryFont}"
+                                  FontSize="{StaticResource BodySmall}"
+                                  Style="{StaticResource ModernCheckBox}"
+                                  Margin="5,10,0,12"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock 
+                                Text="Image Upload"
+                                FontFamily="{StaticResource PrimaryFont}"
+                                FontSize="{StaticResource BodyMedium}"
+                                Foreground="{StaticResource PrimaryTextColor}"/>
+                            <CheckBox Content="Replace images on server"
+                                  IsChecked="False"
+                                  Foreground="{StaticResource PrimaryTextColor}"
+                                  FontFamily="{StaticResource PrimaryFont}"
+                                  FontSize="{StaticResource BodySmall}"
+                                  Style="{StaticResource ModernCheckBox}"
+                                  Margin="5,10,0,0"/>
+                            <CheckBox Content="Make sub folder on S3"
+                                  IsChecked="False"
+                                  Foreground="{StaticResource PrimaryTextColor}"
+                                  FontFamily="{StaticResource PrimaryFont}"
+                                  FontSize="{StaticResource BodySmall}"
+                                  Style="{StaticResource ModernCheckBox}"
+                                  Margin="5,10,0,0"/>
+                        </StackPanel>
+                        
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#424242"
+                    BorderThickness="0,1, 0, 0"
+                    Padding="10">       
+                    <StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="34"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="File Details"
+                               FontFamily="{StaticResource PrimaryFont}"
+                                FontSize="{StaticResource BodyMedium}"
+                                Foreground="{StaticResource PrimaryTextColor}"
+                                Grid.ColumnSpan="2" Margin="0,0,137,0"/>
+                            <TextBlock Grid.Row="1"
+                                Grid.Column="0"
+                                Foreground="{StaticResource PrimaryTextColor}"
+                                FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="{StaticResource BodySmall}"
+                               Text="Folder path"
+                               VerticalAlignment="Center"/>
+                            <Grid Grid.Row="1"
+                              Grid.Column="1"
+                              Margin="5,4,0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="210"/>
+                                    <ColumnDefinition Width="35"/>
+                                </Grid.ColumnDefinitions>
+                                <!-- Selected folder path -->
+                                <TextBox Grid.Column="0"
+                                     Height="25"
+                                     BorderBrush="#424242"
+                                     Background="Transparent"
+                                     Foreground="White"
+                                     VerticalContentAlignment="Center"
+                                     Text="{Binding FolderPath, UpdateSourceTrigger=PropertyChanged}"/>     
+                                <!-- Browse button -->
+                                <Button Grid.Column="1"
+                                    Width="25"
+                                    Height="25"
+                                    Margin="0,0,0,0"
+                                    Content="..."
+                                    BorderBrush="#424242"
+                                    Command="{Binding BrowseFolderCommand}"
+                                    Background="Transparent"
+                                    Foreground="{StaticResource PrimaryTextColor}"/>
+                            </Grid>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
