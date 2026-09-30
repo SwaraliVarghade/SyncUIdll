@@ -29,6 +29,7 @@
                         <RowDefinition Height="34"/>
                         <RowDefinition Height="34"/>
                         <RowDefinition Height="34"/>
+                        <RowDefinition Height="34"/>
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -86,7 +87,7 @@
                             <Image Height="16"
                                    Width="16"
                                    Cursor="Hand"
-                                   Source="{Binding CheckButtonImageSource}"/>        
+                                   Source="{Binding CheckButtonImageSource}"/>
                         </Button>
                         <Button Grid.Column="2"
                             Width="20"
@@ -108,7 +109,7 @@
                             <Image Height="13"
                                    Width="13"
                                    Cursor="Hand"
-                                   Source="/Assets/add-rwlink.png"/>        
+                                   Source="/Assets/add-rwlink.png"/>
                         </Button>
                         <Button Grid.Column="3"
                             Width="20"
@@ -130,7 +131,7 @@
                             <Image Height="16"
                                    Width="16"
                                    Cursor="Hand"
-                                   Source="/Assets/close-rwlink.png"/>        
+                                   Source="/Assets/close-rwlink.png"/>
                         </Button>
                     </Grid>
 
@@ -142,12 +143,16 @@
                                VerticalAlignment="Center"/>
 
                     <ComboBox ItemsSource="{Binding MerchantIDs}"
+                              SelectedItem="{Binding SelectedMerchantId}"
                           IsEnabled="{Binding IsDropDownEnabled}"
                           Style="{StaticResource RWComboBox}"
+                          FontFamily="{StaticResource PrimaryFont}"
+                          FontSize="{StaticResource BodySmall}"
+                          Foreground="{StaticResource PrimaryTextColor}"
                           Grid.Row="2"
                           Grid.ColumnSpan="2" 
                           Margin="84,4,0,0" 
-                          VerticalAlignment="Top" />        
+                          VerticalAlignment="Top" />
 
                     <TextBlock Grid.Row="3"
                                FontSize="{StaticResource BodySmall}"
@@ -157,13 +162,139 @@
                                VerticalAlignment="Center"/>
 
                     <ComboBox ItemsSource="{Binding StoreNames}"
+                              SelectedItem="{Binding SelectedStore}"
                               IsEnabled="{Binding IsDropDownEnabled}"
                               Style="{StaticResource RWComboBox}"
+                              FontFamily="{StaticResource PrimaryFont}"
+                                FontSize="{StaticResource BodySmall}"
+                                Foreground="{StaticResource PrimaryTextColor}"
                               Grid.Row="3"
                               Grid.ColumnSpan="2" 
                               Margin="84,4,0,0" 
-                              VerticalAlignment="Top" />        
+                              VerticalAlignment="Top" />
+                    <TextBlock Grid.Row="4"
+                               FontSize="{StaticResource BodySmall}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               Text="Server"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="4"
+                               Grid.Column="1"
+                               FontSize="{StaticResource BodySmall}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               Foreground="{StaticResource PrimaryTextColor}"
+                               Text="Global"
+                               VerticalAlignment="Center"/>
                 </Grid>
+            </Border>
+            <Border BorderBrush="#424242"
+                Padding="10"
+                BorderThickness="0,1, 0, 0"
+                Margin="0">
+                <StackPanel>
+                    <TextBlock 
+                        Text="Stocktake Upload"
+                        FontFamily="{StaticResource PrimaryFont}"
+                        FontSize="{StaticResource BodyMedium}"
+                        Foreground="{StaticResource PrimaryTextColor}"/>
+                    <CheckBox Content="Push stocktake to server"
+                              IsChecked="False"
+                              Foreground="{StaticResource PrimaryTextColor}"
+                              FontFamily="{StaticResource PrimaryFont}"
+                              FontSize="{StaticResource BodySmall}"
+                              Style="{StaticResource ModernCheckBox}"
+                              Margin="5,10,0,12"/>      
+                </StackPanel>
+            </Border>
+            <Border BorderBrush="#424242"
+                Padding="10"
+                BorderThickness="0,1, 0, 0"
+                Margin="0">
+                <StackPanel>
+                    <TextBlock 
+                        Text="Sync Frequency"
+                        FontFamily="{StaticResource PrimaryFont}"
+                        FontSize="{StaticResource BodyMedium}"
+                        Foreground="{StaticResource PrimaryTextColor}"/>
+                    <CheckBox Content="Enable File Watcher"
+                              IsChecked="False"
+                              Foreground="{StaticResource PrimaryTextColor}"
+                              FontFamily="{StaticResource PrimaryFont}"
+                              FontSize="{StaticResource BodySmall}"
+                              Style="{StaticResource ModernCheckBox}"
+                              Margin="5,10,0,0"/>
+                    <Grid Margin="22,0,0,0">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="IsEnabled" Value="True"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSendToActiveWindow}" Value="False">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="150.985"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Data Sync Interval"
+                                   Foreground="{StaticResource PrimaryTextColor}"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="{StaticResource BodySmall}"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"
+                                   Margin="0,0,0,0">       
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSendToActiveWindow}" Value="False">
+                                            <Setter Property="Opacity" Value="0.5"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <TextBox
+                             Foreground="{StaticResource PrimaryTextColor}"
+                             FontSize="{StaticResource BodySmall}"
+                             Text="{Binding StartDelay}"
+                             BorderBrush="#424242" 
+                             Background="Transparent"
+                             Padding="0,1,0,0"
+                             Height="25" Grid.Column="2" Margin="0,5,0,0" />
+                        <TextBlock Text="sec"
+               Grid.Row="1"
+       Foreground="{StaticResource PrimaryTextColor}"
+       FontFamily="{StaticResource PrimaryFont}"
+       FontSize="{StaticResource BodySmall}"
+       VerticalAlignment="Center"
+       Grid.Column="2"
+       Margin="5,2,0,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSendToActiveWindow}" Value="False">
+                                            <Setter Property="Opacity" Value="0.5"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                    <CheckBox Content="Auto Sync Image"
+                              IsChecked="False"
+                              Foreground="{StaticResource PrimaryTextColor}"
+                              FontFamily="{StaticResource PrimaryFont}"
+                              FontSize="{StaticResource BodySmall}"
+                              Style="{StaticResource ModernCheckBox}"
+                              Margin="5,10,0,12"/>      
+                </StackPanel>
             </Border>
 
             <StackPanel Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -333,16 +464,17 @@
                                 <ColumnDefinition Width="35"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Selected folder path -->
                             <TextBox Grid.Column="0"
                                  Height="25"
                                  BorderBrush="#424242"
                                  Background="Transparent"
-                                 Foreground="White"
+                                 Foreground="{StaticResource PrimaryTextColor}"
+                                 FontFamily="{StaticResource PrimaryFont}"
+                                 FontSize="{StaticResource BodySmall}"
+                                 Padding="0,4,0,0"
                                  VerticalContentAlignment="Center"
-                                 Text="{Binding FolderPath, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding FileFolderPath, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <!-- Browse button -->
                             <Button Grid.Column="1"
                                 Width="25"
                                 Height="25"
@@ -362,10 +494,14 @@
                                VerticalAlignment="Center"/>
 
                         <TextBox Grid.Row="2"
-                         BorderBrush="#424242"    
+                         BorderBrush="#424242"
+                         Text="{Binding FileName}"
+                         FontFamily="{StaticResource PrimaryFont}"
+                         FontSize="{StaticResource BodySmall}"
+                         Padding="0,4"
                          Background="Transparent"
-                         Foreground="White"
-                         Height="25" Grid.ColumnSpan="2" Margin="84,4,0,4"/>
+                         Foreground="{StaticResource PrimaryTextColor}"
+                         Height="25" Margin="5,4,0,4" Grid.Column="1" HorizontalAlignment="Left" Width="235"/>
 
                     </Grid>
 
@@ -526,7 +662,7 @@
                            FontFamily="{StaticResource PrimaryFont}"
                            FontSize="{StaticResource BodySmall}"
                            Text="Authentication URL"
-                           VerticalAlignment="Center"/>     
+                           VerticalAlignment="Center"/>
 
                         <TextBox Grid.Row="1"
                              BorderBrush="#424242"
@@ -590,7 +726,7 @@
                            FontFamily="{StaticResource PrimaryFont}"
                            FontSize="{StaticResource BodySmall}"
                            Text="Custom Feilds"
-                           VerticalAlignment="Center"/>     
+                           VerticalAlignment="Center"/>
 
                         <TextBox Grid.Row="6"
                              BorderBrush="#424242"    
@@ -630,14 +766,15 @@
                         </Button>
                         <Button
                            Grid.Column="1"
-                            Width="160"
+                            Width="105"
                             Height="30"
                                 HorizontalAlignment="Right"
                             Style="{StaticResource BlueButton}"
-                            Command="{Binding ShowMsg}">
+                            Command="{Binding DataSync}">
                             <controls:IconStyle
                                 IconSource="/Assets/resync-save-rwlink.png"
-                                ButtonText="Save &amp; Data Sync"/>
+                                ButtonText="Data Sync"/>
+                            <!--Save &amp; -->
                         </Button>
                     </Grid>
                 </Border>
@@ -705,7 +842,8 @@
                         </StackPanel>
                         <StackPanel>
                             <TextBlock 
-                                Text="Image Upload"
+                                Text="Image Up
+                                "
                                 FontFamily="{StaticResource PrimaryFont}"
                                 FontSize="{StaticResource BodyMedium}"
                                 Foreground="{StaticResource PrimaryTextColor}"/>
@@ -724,13 +862,7 @@
                                   Style="{StaticResource ModernCheckBox}"
                                   Margin="5,10,0,0"/>
                         </StackPanel>
-                        
-                    </StackPanel>
-                </Border>
-                <Border BorderBrush="#424242"
-                    BorderThickness="0,1, 0, 0"
-                    Padding="10">       
-                    <StackPanel>
+
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="35"/>
@@ -743,42 +875,46 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Text="File Details"
-                               FontFamily="{StaticResource PrimaryFont}"
-                                FontSize="{StaticResource BodyMedium}"
-                                Foreground="{StaticResource PrimaryTextColor}"
-                                Grid.ColumnSpan="2" Margin="0,0,137,0"/>
+                                       
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                    FontSize="{StaticResource BodyMedium}"
+                                    Foreground="{StaticResource PrimaryTextColor}"
+                                    Grid.ColumnSpan="2" Margin="0,10,137,0"/>
                             <TextBlock Grid.Row="1"
-                                Grid.Column="0"
-                                Foreground="{StaticResource PrimaryTextColor}"
-                                FontFamily="{StaticResource PrimaryFont}"
-                               FontSize="{StaticResource BodySmall}"
-                               Text="Folder path"
-                               VerticalAlignment="Center"/>
+                                    Grid.Column="0"
+                                    Foreground="{StaticResource PrimaryTextColor}"
+                                    FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="{StaticResource BodySmall}"
+                                   Text="Folder path"
+                                   VerticalAlignment="Center"/>
                             <Grid Grid.Row="1"
-                              Grid.Column="1"
-                              Margin="5,4,0,4">
+                                  Grid.Column="1"
+                                  Margin="5,4,0,4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="210"/>
                                     <ColumnDefinition Width="35"/>
                                 </Grid.ColumnDefinitions>
                                 <!-- Selected folder path -->
                                 <TextBox Grid.Column="0"
-                                     Height="25"
-                                     BorderBrush="#424242"
-                                     Background="Transparent"
-                                     Foreground="White"
-                                     VerticalContentAlignment="Center"
-                                     Text="{Binding FolderPath, UpdateSourceTrigger=PropertyChanged}"/>     
+                                         Height="25"
+                                         BorderBrush="#424242"
+                                         Background="Transparent"
+                                         Foreground="{StaticResource PrimaryTextColor}"
+                                         FontFamily="{StaticResource PrimaryFont}"
+                                         FontSize="{StaticResource BodySmall}"
+                                         Padding="0,4,0,0"
+                                         VerticalContentAlignment="Center"
+                                         Text="{Binding FileFolderPath, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="210"/>
                                 <!-- Browse button -->
                                 <Button Grid.Column="1"
-                                    Width="25"
-                                    Height="25"
-                                    Margin="0,0,0,0"
-                                    Content="..."
-                                    BorderBrush="#424242"
-                                    Command="{Binding BrowseFolderCommand}"
-                                    Background="Transparent"
-                                    Foreground="{StaticResource PrimaryTextColor}"/>
+                                        Width="25"
+                                        Height="25"
+                                        Margin="0,0,0,0"
+                                        Content="..."
+                                        BorderBrush="#424242"
+                                        Command="{Binding BrowseFolderCommand}"
+                                        Background="Transparent"
+                                        Foreground="{StaticResource PrimaryTextColor}"/>
                             </Grid>
                         </Grid>
                     </StackPanel>

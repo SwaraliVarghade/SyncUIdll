@@ -29,13 +29,7 @@ namespace SyncUI.SyncView
         public ICommand EnableAddModeCommand { get; }
         public ICommand CancelAddModeCommand { get; }
         public ICommand BrowseFolderCommand { get; }
-
-        private string _folderPath = string.Empty;
-        public string FolderPath
-        {
-            get => _folderPath;
-            set { _folderPath = value; OnPropertyChanged(); }
-        }
+        public ICommand DataSync { get; }
 
         private string _checkButtonImageSource = "/Assets/checkedbox.png";
         public string CheckButtonImageSource
@@ -47,7 +41,22 @@ namespace SyncUI.SyncView
         public string apiKey
         {
             get => _syncService.apiKey;
-            set { _syncService.apiKey = value; OnPropertyChanged(); }
+            set { 
+                _syncService.apiKey = value;
+                OnPropertyChanged(); 
+            }
+        }
+        public string FileFolderPath
+        {
+            get => _syncService.FileFolderPath;
+            set { _syncService.FileFolderPath = value;
+                Debug.WriteLine("Here => " + _syncService.FileFolderPath);
+                    OnPropertyChanged(FileFolderPath); }
+        }
+        public string FileName
+        {
+            get => _syncService.FileName;
+            set { _syncService.FileName = value; OnPropertyChanged(); }
         }
 
         private bool _isApiKeyEnabled = false;
@@ -93,6 +102,24 @@ namespace SyncUI.SyncView
         {
             get => _syncService.MerchantIDs;
         }
+        private string _selectedMerchantId;
+        public string SelectedMerchantId
+        {
+            get => _selectedMerchantId;
+            set { 
+                _selectedMerchantId = value;
+                OnPropertyChanged(); 
+            }
+        }
+        private string _selectedStore;
+        public string SelectedStore
+        {
+            get => _selectedStore;
+            set { 
+                _selectedStore = value;
+                OnPropertyChanged(); 
+            }
+        }
 
         public SyncViewModel(INotificationService notificationService)
         {
@@ -102,6 +129,7 @@ namespace SyncUI.SyncView
                 CheckApiKey();
             }
             
+
             // Check button command
             AddApi = new RelayCommandNew(_ => CheckApiKey());
             
@@ -124,6 +152,7 @@ namespace SyncUI.SyncView
 
             // Browse Folder command
             BrowseFolderCommand = new RelayCommandNew(_ => BrowseFolder());
+            DataSync = new RelayCommandNew(_ => StartDataSync(apiKey));
         }
 
         private void BrowseFolder()
@@ -132,14 +161,14 @@ namespace SyncUI.SyncView
             {
                 dialog.Description = "Select a folder for syncing";
                 dialog.ShowNewFolderButton = true;
-                if (!string.IsNullOrEmpty(FolderPath))
+                if (!string.IsNullOrEmpty(FileFolderPath))
                 {
-                    dialog.SelectedPath = FolderPath;
+                    dialog.SelectedPath = FileFolderPath;
                 }
 
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    FolderPath = dialog.SelectedPath;
+                    FileFolderPath = dialog.SelectedPath;
                 }
             }
         }
@@ -163,6 +192,15 @@ namespace SyncUI.SyncView
             OnPropertyChanged(nameof(StoreNames));
             OnPropertyChanged(nameof(MerchantIDs));
             OnPropertyChanged(nameof(VerifiedApiKey));
+            SelectedMerchantId = MerchantIDs[0];
+            SelectedStore = StoreNames[0];
+        }
+
+        private void StartDataSync(string apikey)
+        {
+            Debug.WriteLine("Selected Merchant Id => "+SelectedMerchantId);
+            Debug.WriteLine("Selected Store => " + SelectedStore);
+            _syncService.DataSync(apikey, SelectedMerchantId, SelectedStore);
         }
     }
 }

@@ -82,10 +82,10 @@
             <Setter.Value>
                 <Style TargetType="ComboBoxItem">
 
-                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
                     <Setter Property="Background" Value="#2B2F36"/>
                     <Setter Property="Padding" Value="2,0,0,0"/>
-                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="Height" Value="25"/>
 
                     <Style.Triggers>
 
