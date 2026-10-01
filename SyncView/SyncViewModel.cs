@@ -152,15 +152,6 @@ namespace SyncUI.SyncView
         {
             get => _startDelay;
         }
-        //public string SelectedStarFiletDelay
-        //{
-        //    get => _syncService.SelectedStartDelay;
-        //    set
-        //    {
-        //        _syncService.SelectedStartDelay = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
         public ObservableCollection<string> StoreNames
         {
             get => _syncService.StoreNames;
