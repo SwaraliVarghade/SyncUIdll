@@ -94,6 +94,73 @@ namespace SyncUI.SyncView
             set { _syncService.IsDropDownEnabled = value; OnPropertyChanged(); }
         }
 
+        public bool isManualSync
+        {
+            get => _syncService.isManualSync;
+            set { 
+                _syncService.isManualSync = value; 
+                OnPropertyChanged(); 
+            }
+        }
+        public bool EnableWatcher
+        {
+            get => _syncService.EnableFileWatcher;
+            set
+            {
+                _syncService.EnableFileWatcher = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool AutoSyncData
+        {
+            get => _syncService.AutoSyncData;
+            set
+            {
+                _syncService.AutoSyncData = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool AutoSyncImg
+        {
+            get => _syncService.AutoSyncImg;
+            set
+            {
+                _syncService.AutoSyncImg = value;
+                OnPropertyChanged();
+            }
+        }
+        public string SelectedFileWatcherDelay
+        {
+            get => _syncService.SelectedFileWatcherDelay;
+            set
+            {
+                _syncService.SelectedFileWatcherDelay = value;
+                OnPropertyChanged();
+            }
+        }
+        public string SelectedAutoDataDelay
+        {
+            get => _syncService.SelectedAutoDataDelay;
+            set
+            {
+                _syncService.SelectedAutoDataDelay = value;
+                OnPropertyChanged();
+            }
+        }
+        private ObservableCollection<string> _startDelay = new ObservableCollection<string> {"5", "10", "15", "20", "30", "60", "120", "180", "240", "480" };
+        public ObservableCollection<string> StartDelay
+        {
+            get => _startDelay;
+        }
+        //public string SelectedStarFiletDelay
+        //{
+        //    get => _syncService.SelectedStartDelay;
+        //    set
+        //    {
+        //        _syncService.SelectedStartDelay = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
         public ObservableCollection<string> StoreNames
         {
             get => _syncService.StoreNames;
