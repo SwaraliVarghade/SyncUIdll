@@ -187,161 +187,161 @@
                                VerticalAlignment="Center"/>
                 </Grid>
             </Border>
-            <Border BorderBrush="#424242"
-                Padding="10"
-                BorderThickness="0,1, 0, 0"
-                Margin="0">
-                <StackPanel>
-                    <TextBlock 
-                        Text="Stocktake Upload"
-                        FontFamily="{StaticResource PrimaryFont}"
-                        FontSize="{StaticResource BodyMedium}"
-                        Foreground="{StaticResource PrimaryTextColor}"/>
-                    <CheckBox Content="Push stocktake to server"
-                              IsChecked="False"
-                              Foreground="{StaticResource PrimaryTextColor}"
-                              FontFamily="{StaticResource PrimaryFont}"
-                              FontSize="{StaticResource BodySmall}"
-                              Style="{StaticResource ModernCheckBox}"
-                              Margin="5,10,0,12"/>      
-                </StackPanel>
-            </Border>
-            <Border BorderBrush="#424242"
-                Padding="10"
-                BorderThickness="0,1, 0, 0"
-                Margin="0">
-                <StackPanel>
-                    <TextBlock 
-                        Text="Sync Frequency"
-                        FontFamily="{StaticResource PrimaryFont}"
-                        FontSize="{StaticResource BodyMedium}"
-                        Foreground="{StaticResource PrimaryTextColor}"/>
+
+            <StackPanel Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Border BorderBrush="#424242"
+                    Padding="10"
+                    BorderThickness="0,1, 0, 0"
+                    Margin="0">
                     <StackPanel>
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsChecked, ElementName=FileRadioButton}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-                        <CheckBox Content="Enable File Watcher"
-                                    IsChecked="{Binding EnableWatcher}"
-                                    Foreground="{StaticResource PrimaryTextColor}"
-                                    FontFamily="{StaticResource PrimaryFont}"
-                                    FontSize="{StaticResource BodySmall}"
-                                    Style="{StaticResource ModernCheckBox}"
-                                    Margin="5,10,0,0"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsChecked, ElementName=FileRadioButton}" Value="False">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-                        <CheckBox Content="Auto Sync Data"
-                                  IsChecked="{Binding AutoSyncData}"
+                        <TextBlock 
+                            Text="Stocktake Upload"
+                            FontFamily="{StaticResource PrimaryFont}"
+                            FontSize="{StaticResource BodyMedium}"
+                            Foreground="{StaticResource PrimaryTextColor}"/>
+                        <CheckBox Content="Push stocktake to server"
+                                  IsChecked="False"
                                   Foreground="{StaticResource PrimaryTextColor}"
                                   FontFamily="{StaticResource PrimaryFont}"
                                   FontSize="{StaticResource BodySmall}"
                                   Style="{StaticResource ModernCheckBox}"
-                                  Margin="5,10,0,0"/>
-                        <Grid Margin="2,5,0,-5">
-                            <Grid.Style>
-                                <Style TargetType="Grid">
-                                    <Setter Property="IsEnabled" Value="True"/>
+                                  Margin="5,10,0,12"/>      
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#424242"
+                    Padding="10"
+                    BorderThickness="0,1, 0, 0"
+                    Margin="0">
+                    <StackPanel>
+                        <TextBlock 
+                            Text="Sync Frequency"
+                            FontFamily="{StaticResource PrimaryFont}"
+                            FontSize="{StaticResource BodyMedium}"
+                            Foreground="{StaticResource PrimaryTextColor}"/>
+                        <StackPanel>
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding AutoSyncData}" Value="False">
-                                            <Setter Property="IsEnabled" Value="False"/>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=FileRadioButton}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </Grid.Style>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="30"/>
-                                <ColumnDefinition Width="180.985"/>
-                                <ColumnDefinition Width="128"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Text="Data Sync Interval"
-                                       Foreground="{StaticResource PrimaryTextColor}"
-                                       FontFamily="{StaticResource PrimaryFont}"
-                                       FontSize="{StaticResource BodySmall}"
-                                       VerticalAlignment="Center"
-                                       Grid.Column="1"
-                                       Margin="0,0,0,0">       
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="IsEnabled" Value="True"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding AutoSyncData}" Value="False">
-                                                <Setter Property="Opacity" Value="0.5"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-
-                            <ComboBox ItemsSource="{Binding StartDelay}"
-                                      SelectedItem="{Binding SelectedAutoDataDelay}"
-                                      Padding="0,1,0,0"
-                                      Margin="30,5,0,0"
-                                      Width="70"
+                            </StackPanel.Style>
+                            <CheckBox Content="Enable File Watcher"
+                                        IsChecked="{Binding EnableWatcher}"
+                                        Foreground="{StaticResource PrimaryTextColor}"
+                                        FontFamily="{StaticResource PrimaryFont}"
+                                        FontSize="{StaticResource BodySmall}"
+                                        Style="{StaticResource ModernCheckBox}"
+                                        Margin="5,10,0,0"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=FileRadioButton}" Value="False">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <CheckBox Content="Auto Sync Data"
+                                      IsChecked="{Binding AutoSyncData}"
+                                      Foreground="{StaticResource PrimaryTextColor}"
                                       FontFamily="{StaticResource PrimaryFont}"
                                       FontSize="{StaticResource BodySmall}"
-                                      Foreground="{StaticResource PrimaryTextColor}"
-                                      Grid.ColumnSpan="3"
-                                      VerticalAlignment="Top">
-                                <ComboBox.Style>
-                                    <Style TargetType="ComboBox" BasedOn="{StaticResource RWComboBox}">
+                                      Style="{StaticResource ModernCheckBox}"
+                                      Margin="5,10,0,0"/>
+                            <Grid Margin="2,5,0,-5">
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
                                         <Setter Property="IsEnabled" Value="True"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding AutoSyncData}" Value="False">
-                                                <Setter Property="Opacity" Value="0.5"/>
+                                                <Setter Property="IsEnabled" Value="False"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </ComboBox.Style>
-                            </ComboBox>
+                                </Grid.Style>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="180.985"/>
+                                    <ColumnDefinition Width="128"/>
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="in mins"
-                                       Foreground="{StaticResource PrimaryTextColor}"
-                                       FontFamily="{StaticResource PrimaryFont}"
-                                       FontSize="{StaticResource BodySmall}"
-                                       VerticalAlignment="Center"
-                                       Grid.Column="3"
-                                       Margin="20,2,0,0">        
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="IsEnabled" Value="True"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding AutoSyncData}" Value="False">
-                                                <Setter Property="Opacity" Value="0.5"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </Grid>
+                                <TextBlock Text="Data Sync Interval"
+                                           Foreground="{StaticResource PrimaryTextColor}"
+                                           FontFamily="{StaticResource PrimaryFont}"
+                                           FontSize="{StaticResource BodySmall}"
+                                           VerticalAlignment="Center"
+                                           Grid.Column="1"
+                                           Margin="0,0,0,0">       
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="IsEnabled" Value="True"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding AutoSyncData}" Value="False">
+                                                    <Setter Property="Opacity" Value="0.5"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+                                <ComboBox ItemsSource="{Binding StartDelay}"
+                                          SelectedItem="{Binding SelectedAutoDataDelay}"
+                                          Padding="0,1,0,0"
+                                          Margin="30,5,0,0"
+                                          Width="70"
+                                          FontFamily="{StaticResource PrimaryFont}"
+                                          FontSize="{StaticResource BodySmall}"
+                                          Foreground="{StaticResource PrimaryTextColor}"
+                                          Grid.ColumnSpan="3"
+                                          VerticalAlignment="Top">
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox" BasedOn="{StaticResource RWComboBox}">
+                                            <Setter Property="IsEnabled" Value="True"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding AutoSyncData}" Value="False">
+                                                    <Setter Property="Opacity" Value="0.5"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
+
+                                <TextBlock Text="in mins"
+                                           Foreground="{StaticResource PrimaryTextColor}"
+                                           FontFamily="{StaticResource PrimaryFont}"
+                                           FontSize="{StaticResource BodySmall}"
+                                           VerticalAlignment="Center"
+                                           Grid.Column="3"
+                                           Margin="20,2,0,0">        
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="IsEnabled" Value="True"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding AutoSyncData}" Value="False">
+                                                    <Setter Property="Opacity" Value="0.5"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
+                        </StackPanel>
+                        <CheckBox Content="Auto Sync Image"
+                                  IsChecked="{Binding AutoSyncImg}"
+                                  Foreground="{StaticResource PrimaryTextColor}"
+                                  FontFamily="{StaticResource PrimaryFont}"
+                                  FontSize="{StaticResource BodySmall}"
+                                  Style="{StaticResource ModernCheckBox}"
+                                  Margin="5,10,0,12"/>      
                     </StackPanel>
-                    <CheckBox Content="Auto Sync Image"
-                              IsChecked="{Binding AutoSyncImg}"
-                              Foreground="{StaticResource PrimaryTextColor}"
-                              FontFamily="{StaticResource PrimaryFont}"
-                              FontSize="{StaticResource BodySmall}"
-                              Style="{StaticResource ModernCheckBox}"
-                              Margin="5,10,0,12"/>      
-                </StackPanel>
-            </Border>
-
-            <StackPanel Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}}">
+                </Border>
 
                 <Border BorderBrush="#424242"
                     Padding="10"
@@ -570,7 +570,6 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="28"/>
-                            <RowDefinition Height="34"/>
                             <RowDefinition Height="34"/>
                             <RowDefinition Height="34"/>
                             <RowDefinition Height="34"/>
