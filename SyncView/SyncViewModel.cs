@@ -14,7 +14,6 @@ namespace SyncUI.SyncView
     {
         private readonly SyncService _syncService;
 
-        private bool _verifiedApi;
         public bool VerifiedApiKey
         {
             get => _syncService.VerifiedApiKey;
@@ -102,6 +101,22 @@ namespace SyncUI.SyncView
                 OnPropertyChanged(); 
             }
         }
+        public bool isReplaceDataOnServer
+        {
+            get => _syncService.isReplaceDataOnServer;
+            set { 
+                _syncService.isReplaceDataOnServer = value; 
+                OnPropertyChanged(); 
+            }
+        }
+        public bool isRFIDdecryption
+        {
+            get => _syncService.isRFIDdecryption;
+            set { 
+                _syncService.isRFIDdecryption = value; 
+                OnPropertyChanged(); 
+            }
+        }
         public bool EnableWatcher
         {
             get => _syncService.EnableFileWatcher;
@@ -126,15 +141,6 @@ namespace SyncUI.SyncView
             set
             {
                 _syncService.AutoSyncImg = value;
-                OnPropertyChanged();
-            }
-        }
-        public string SelectedFileWatcherDelay
-        {
-            get => _syncService.SelectedFileWatcherDelay;
-            set
-            {
-                _syncService.SelectedFileWatcherDelay = value;
                 OnPropertyChanged();
             }
         }
@@ -181,12 +187,11 @@ namespace SyncUI.SyncView
 
         public SyncViewModel(INotificationService notificationService)
         {
-            _syncService = SyncService.GetInstance(notificationService);//Creating object if it is not get created in UI dll.
-            if(apiKey != null)
+            _syncService = SyncService.GetInstance(notificationService);//Creating object if it is not get created in UI dll, Only one instance of SyncService will be created and used in both UI and BuisnessLogic dlls
+            if (apiKey != null)
             {
                 CheckApiKey();
             }
-            
 
             // Check button command
             AddApi = new RelayCommandNew(_ => CheckApiKey());

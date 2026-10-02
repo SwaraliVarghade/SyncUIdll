@@ -234,83 +234,6 @@
                                     FontSize="{StaticResource BodySmall}"
                                     Style="{StaticResource ModernCheckBox}"
                                     Margin="5,10,0,0"/>
-                        <Grid Margin="2,5,0,-5">
-                            <Grid.Style>
-                                <Style TargetType="Grid">
-                                    <Setter Property="IsEnabled" Value="True"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding EnableWatcher}" Value="False">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Grid.Style>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="30"/>
-                                <ColumnDefinition Width="180.985"/>
-                                <ColumnDefinition Width="128"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Text="Data Sync Interval"
-                                        Foreground="{StaticResource PrimaryTextColor}"
-                                        FontFamily="{StaticResource PrimaryFont}"
-                                        FontSize="{StaticResource BodySmall}"
-                                        VerticalAlignment="Center"
-                                        Grid.Column="1"
-                                        Margin="0,0,0,0">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="IsEnabled" Value="True"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding EnableWatcher}" Value="False">
-                                                <Setter Property="Opacity" Value="0.5"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-
-                            <ComboBox ItemsSource="{Binding StartDelay}"
-                                        SelectedItem="{Binding SelectedFileWatcherDelay}"
-                                        Padding="0,1,0,0"
-                                        Margin="30,5,0,0"
-                                        Width="70"
-                                        FontFamily="{StaticResource PrimaryFont}"
-                                        FontSize="{StaticResource BodySmall}"
-                                        Foreground="{StaticResource PrimaryTextColor}"
-                                        Grid.ColumnSpan="3"
-                                        VerticalAlignment="Top">
-                                <ComboBox.Style>
-                                    <Style TargetType="ComboBox" BasedOn="{StaticResource RWComboBox}">
-                                        <Setter Property="IsEnabled" Value="True"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding EnableWatcher}" Value="False">
-                                                <Setter Property="Opacity" Value="0.5"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ComboBox.Style>
-                            </ComboBox>
-
-                            <TextBlock Text="in mins"
-                                        Foreground="{StaticResource PrimaryTextColor}"
-                                        FontFamily="{StaticResource PrimaryFont}"
-                                        FontSize="{StaticResource BodySmall}"
-                                        VerticalAlignment="Center"
-                                        Grid.Column="3"
-                                        Margin="20,2,0,0">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="IsEnabled" Value="True"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding EnableWatcher}" Value="False">
-                                                <Setter Property="Opacity" Value="0.5"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </Grid>
                     </StackPanel>
                     <StackPanel>
                         <StackPanel.Style>
@@ -493,7 +416,7 @@
                         </StackPanel>
 
                         <CheckBox Content="Replace data on server"
-                              IsChecked="False"
+                              IsChecked="{Binding isReplaceDataOnServer}"
                               Foreground="{StaticResource PrimaryTextColor}"
                               FontFamily="{StaticResource PrimaryFont}"
                               FontSize="{StaticResource BodySmall}"
@@ -509,7 +432,7 @@
                               Margin="5,10,0,0"/>
 
                         <CheckBox Content="RFID Decryption"
-                              IsChecked="False"
+                              IsChecked="{Binding isRFIDdecryption}"
                               Foreground="{StaticResource PrimaryTextColor}"
                               FontFamily="{StaticResource PrimaryFont}"
                               FontSize="{StaticResource BodySmall}"
@@ -619,7 +542,7 @@
                          Text="{Binding FileName}"
                          FontFamily="{StaticResource PrimaryFont}"
                          FontSize="{StaticResource BodySmall}"
-                         Padding="0,4"
+                         Padding="0,4,0,0"
                          Background="Transparent"
                          Foreground="{StaticResource PrimaryTextColor}"
                          Height="25" Margin="5,4,0,4" Grid.Column="1" HorizontalAlignment="Left" Width="235"/>
