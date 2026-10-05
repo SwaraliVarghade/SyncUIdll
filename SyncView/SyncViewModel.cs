@@ -255,8 +255,11 @@ namespace SyncUI.SyncView
             OnPropertyChanged(nameof(StoreNames));
             OnPropertyChanged(nameof(MerchantIDs));
             OnPropertyChanged(nameof(VerifiedApiKey));
-            SelectedMerchantId = MerchantIDs[0];
-            SelectedStore = StoreNames[0];
+            if (MerchantIDs != null && MerchantIDs.Count > 0)
+                SelectedMerchantId = MerchantIDs[0];
+
+            if (StoreNames != null && StoreNames.Count > 0)
+                SelectedStore = StoreNames[0];
         }
 
         private void StartDataSync(string apikey)
