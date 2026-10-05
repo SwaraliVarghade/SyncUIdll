@@ -17,7 +17,7 @@ namespace SyncUI
         public SyncViewUI(INotificationService notificationService)
         {
             InitializeComponent();
-            DataContext = SyncService.GetInstance(notificationService);
+            // DataContext set by caller
         }
     }
 }

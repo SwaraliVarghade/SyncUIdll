@@ -188,7 +188,7 @@
                 </Grid>
             </Border>
 
-            <StackPanel Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                 <Border BorderBrush="#424242"
                     Padding="10"
                     BorderThickness="0,1, 0, 0"
@@ -570,6 +570,7 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="28"/>
+                            <RowDefinition Height="34"/>
                             <RowDefinition Height="34"/>
                             <RowDefinition Height="34"/>
                             <RowDefinition Height="34"/>
