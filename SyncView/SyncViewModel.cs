@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Windows.Input;
 using RWLinkNotificationService.Services;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SyncUI.SyncView
 {
@@ -45,13 +46,17 @@ namespace SyncUI.SyncView
                 OnPropertyChanged(); 
             }
         }
+
         public string FileFolderPath
         {
             get => _syncService.FileFolderPath;
-            set { _syncService.FileFolderPath = value;
+            set { 
+                _syncService.FileFolderPath = value;
                 Debug.WriteLine("Here => " + _syncService.FileFolderPath);
-                    OnPropertyChanged(FileFolderPath); }
+                OnPropertyChanged(nameof(FileFolderPath)); 
+            }
         }
+
         public string FileName
         {
             get => _syncService.FileName;
@@ -63,6 +68,16 @@ namespace SyncUI.SyncView
         {
             get => _isApiKeyEnabled;
             set { _isApiKeyEnabled = value; OnPropertyChanged(); }
+        }
+
+        public bool IsVerifyButtonEnabled
+        {
+            get => _syncService.IsVerifyButtonEnabled;
+            set
+            {
+                _syncService.IsVerifyButtonEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
         private bool _isFileChecked = true;
@@ -86,7 +101,6 @@ namespace SyncUI.SyncView
             set { _isWebServiceChecked = value; OnPropertyChanged(); }
         }
 
-        //private bool _isDropDownEnabled = true;
         public bool IsDropDownEnabled
         {
             get => _syncService.IsDropDownEnabled;
@@ -101,6 +115,7 @@ namespace SyncUI.SyncView
                 OnPropertyChanged(); 
             }
         }
+
         public bool isReplaceDataOnServer
         {
             get => _syncService.isReplaceDataOnServer;
@@ -109,6 +124,7 @@ namespace SyncUI.SyncView
                 OnPropertyChanged(); 
             }
         }
+
         public bool isRFIDdecryption
         {
             get => _syncService.isRFIDdecryption;
@@ -117,6 +133,7 @@ namespace SyncUI.SyncView
                 OnPropertyChanged(); 
             }
         }
+
         public bool EnableWatcher
         {
             get => _syncService.EnableFileWatcher;
@@ -126,6 +143,7 @@ namespace SyncUI.SyncView
                 OnPropertyChanged();
             }
         }
+
         public bool AutoSyncData
         {
             get => _syncService.AutoSyncData;
@@ -135,6 +153,7 @@ namespace SyncUI.SyncView
                 OnPropertyChanged();
             }
         }
+
         public bool AutoSyncImg
         {
             get => _syncService.AutoSyncImg;
@@ -144,6 +163,7 @@ namespace SyncUI.SyncView
                 OnPropertyChanged();
             }
         }
+
         public string SelectedAutoDataDelay
         {
             get => _syncService.SelectedAutoDataDelay;
@@ -153,44 +173,117 @@ namespace SyncUI.SyncView
                 OnPropertyChanged();
             }
         }
+
         private ObservableCollection<string> _startDelay = new ObservableCollection<string> {"5", "10", "15", "20", "30", "60", "120", "180", "240", "480" };
-        public ObservableCollection<string> StartDelay
-        {
-            get => _startDelay;
-        }
-        public ObservableCollection<string> StoreNames
-        {
-            get => _syncService.StoreNames;
-        }
-        public ObservableCollection<string> MerchantIDs
-        {
-            get => _syncService.MerchantIDs;
-        }
+        public ObservableCollection<string> StartDelay => _startDelay;
+
+        public ObservableCollection<string> StoreNames => _syncService.StoreNames;
+
+        public ObservableCollection<string> MerchantIDs => _syncService.MerchantIDs;
+
         private string _selectedMerchantId;
         public string SelectedMerchantId
         {
             get => _selectedMerchantId;
             set { 
-                _selectedMerchantId = value;
-                OnPropertyChanged(); 
+                if (_selectedMerchantId != value)
+                {
+                    _selectedMerchantId = value; 
+                    OnPropertyChanged(); 
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        _syncService.LoadStoresForMerchant(value);
+                        _syncService.UpdateSelectedMerchant(apiKey, value);
+                    }
+                    OnPropertyChanged(nameof(StoreNames));
+                    if (StoreNames != null && StoreNames.Count > 0)
+                    {
+                        if (string.IsNullOrEmpty(SelectedStore) || !StoreNames.Contains(SelectedStore))
+                        {
+                            SelectedStore = StoreNames[0];
+                        }
+                    }
+                }
             }
         }
+
         private string _selectedStore;
         public string SelectedStore
         {
             get => _selectedStore;
             set { 
-                _selectedStore = value;
-                OnPropertyChanged(); 
+                if (_selectedStore != value)
+                {
+                    _selectedStore = value; 
+                    OnPropertyChanged(); 
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        _syncService.UpdateSelectedStore(apiKey, value);
+                    }
+                }
             }
         }
 
         public SyncViewModel(INotificationService notificationService)
         {
-            _syncService = SyncService.GetInstance(notificationService);//Creating object if it is not get created in UI dll, Only one instance of SyncService will be created and used in both UI and BuisnessLogic dlls
-            if (apiKey != null)
+            _syncService = SyncService.GetInstance(notificationService);
+
+            // Subscribe to SyncService property changes so UI is immediately refreshed
+            _syncService.PropertyChanged += (sender, args) =>
             {
-                CheckApiKey();
+                OnPropertyChanged(args.PropertyName);
+
+                if (args.PropertyName == nameof(SyncService.VerifiedApiKey) ||
+                    args.PropertyName == nameof(SyncService.VerifyButtonImage))
+                {
+                    CheckButtonImageSource = _syncService.VerifiedApiKey ? "/Assets/check-rwlink.png" : "/Assets/checkedbox.png";
+                    IsDropDownEnabled = _syncService.VerifiedApiKey;
+                    IsVerifyButtonEnabled = !_syncService.VerifiedApiKey;
+                    OnPropertyChanged(nameof(CheckButtonImageSource));
+                    OnPropertyChanged(nameof(VerifiedApiKey));
+                    OnPropertyChanged(nameof(IsDropDownEnabled));
+                    OnPropertyChanged(nameof(IsVerifyButtonEnabled));
+                }
+
+                if (args.PropertyName == nameof(SyncService.MerchantIDs))
+                {
+                    OnPropertyChanged(nameof(MerchantIDs));
+                    if (MerchantIDs != null && MerchantIDs.Count > 0)
+                    {
+                        if (string.IsNullOrEmpty(SelectedMerchantId) || !MerchantIDs.Contains(SelectedMerchantId))
+                        {
+                            SelectedMerchantId = MerchantIDs[0];
+                        }
+                    }
+                }
+
+                if (args.PropertyName == nameof(SyncService.StoreNames))
+                {
+                    OnPropertyChanged(nameof(StoreNames));
+                    if (StoreNames != null && StoreNames.Count > 0)
+                    {
+                        if (string.IsNullOrEmpty(SelectedStore) || !StoreNames.Contains(SelectedStore))
+                        {
+                            SelectedStore = StoreNames[0];
+                        }
+                    }
+                }
+            };
+
+            // Check if already verified from existing settings
+            if (_syncService.VerifiedApiKey)
+            {
+                CheckButtonImageSource = "/Assets/check-rwlink.png";
+                IsDropDownEnabled = true;
+                IsVerifyButtonEnabled = false;
+                if (MerchantIDs != null && MerchantIDs.Count > 0)
+                {
+                    SelectedMerchantId = MerchantIDs[0];
+                }
+                if (StoreNames != null && StoreNames.Count > 0)
+                {
+                    SelectedStore = StoreNames[0];
+                }
             }
 
             // Check button command
@@ -200,6 +293,7 @@ namespace SyncUI.SyncView
             EnableAddModeCommand = new RelayCommandNew(_ => 
             {
                 IsApiKeyEnabled = true;
+                IsVerifyButtonEnabled = true;
                 IsDropDownEnabled = false;
                 CheckButtonImageSource = "/Assets/checkedbox.png";
             });
@@ -207,10 +301,22 @@ namespace SyncUI.SyncView
             // Toggle/Close button command
             CancelAddModeCommand = new RelayCommandNew(_ => 
             {
-                // Go to original state
+                // Return to previous state
                 IsApiKeyEnabled = false;
-                IsDropDownEnabled = false;
-                VerifiedApiKey = false;
+                if (_syncService.VerifiedApiKey)
+                {
+                    VerifiedApiKey = true;
+                    IsDropDownEnabled = true;
+                    IsVerifyButtonEnabled = false;
+                    CheckButtonImageSource = "/Assets/check-rwlink.png";
+                }
+                else
+                {
+                    VerifiedApiKey = false;
+                    IsDropDownEnabled = false;
+                    IsVerifyButtonEnabled = true;
+                    CheckButtonImageSource = "/Assets/checkedbox.png";
+                }
             });
 
             // Browse Folder command
@@ -242,29 +348,52 @@ namespace SyncUI.SyncView
             IsApiKeyEnabled = false;
             await _syncService.VerifyApiKey(apiKey);
             
-            CheckButtonImageSource = "/Assets/check-rwlink.png";
-            
-            if (StoreNames != null && StoreNames.Count > 0)
+            if (_syncService.VerifiedApiKey)
             {
                 IsDropDownEnabled = true;
+                VerifiedApiKey = true;
+                CheckButtonImageSource = "/Assets/check-rwlink.png";
+                IsVerifyButtonEnabled = false;
+
+                if (MerchantIDs != null && MerchantIDs.Count > 0)
+                {
+                    if (string.IsNullOrEmpty(SelectedMerchantId) || !MerchantIDs.Contains(SelectedMerchantId))
+                    {
+                        SelectedMerchantId = MerchantIDs[0];
+                    }
+                    else
+                    {
+                        _syncService.LoadStoresForMerchant(SelectedMerchantId);
+                    }
+                }
+
+                if (StoreNames != null && StoreNames.Count > 0)
+                {
+                    if (string.IsNullOrEmpty(SelectedStore) || !StoreNames.Contains(SelectedStore))
+                    {
+                        SelectedStore = StoreNames[0];
+                    }
+                }
             }
             else
             {
                 IsDropDownEnabled = false;
+                VerifiedApiKey = false;
+                IsVerifyButtonEnabled = true;
+                CheckButtonImageSource = "/Assets/checkedbox.png";
             }
+
             OnPropertyChanged(nameof(StoreNames));
             OnPropertyChanged(nameof(MerchantIDs));
             OnPropertyChanged(nameof(VerifiedApiKey));
-            if (MerchantIDs != null && MerchantIDs.Count > 0)
-                SelectedMerchantId = MerchantIDs[0];
-
-            if (StoreNames != null && StoreNames.Count > 0)
-                SelectedStore = StoreNames[0];
+            OnPropertyChanged(nameof(IsDropDownEnabled));
+            OnPropertyChanged(nameof(CheckButtonImageSource));
+            OnPropertyChanged(nameof(IsVerifyButtonEnabled));
         }
 
         private void StartDataSync(string apikey)
         {
-            Debug.WriteLine("Selected Merchant Id => "+SelectedMerchantId);
+            Debug.WriteLine("Selected Merchant Id => " + SelectedMerchantId);
             Debug.WriteLine("Selected Store => " + SelectedStore);
             _syncService.DataSync(apikey, SelectedMerchantId, SelectedStore);
         }
