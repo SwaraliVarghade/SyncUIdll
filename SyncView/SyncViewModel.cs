@@ -1,19 +1,22 @@
-using System;
+using RWLinkNotificationService.Services;
 using SyncBuisnessLogic.BuisnessLogic;
 using SyncBuisnessLogic.Helper;
-using SyncBuisnessLogic.Model;
+using SyncUI.Services;
 using SyncUI.Helper;
-using System.Diagnostics;
-using System.Windows.Input;
-using RWLinkNotificationService.Services;
+using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 
 namespace SyncUI.SyncView
 {
     public class SyncViewModel : SyncBaseViewModel
     {
         private readonly SyncService _syncService;
+        private readonly IDialogService _dialogService;
+        private readonly INotificationService _notification;
 
         public bool VerifiedApiKey
         {
@@ -27,7 +30,7 @@ namespace SyncUI.SyncView
 
         public ICommand AddApi { get; }
         public ICommand EnableAddModeCommand { get; }
-        public ICommand CancelAddModeCommand { get; }
+        public ICommand DeleteApiCommand { get; }
         public ICommand BrowseFolderCommand { get; }
         public ICommand DataSync { get; }
 
@@ -224,8 +227,10 @@ namespace SyncUI.SyncView
             }
         }
 
-        public SyncViewModel(INotificationService notificationService)
+        public SyncViewModel(INotificationService notificationService, IDialogService dialogService = null)
         {
+            _dialogService = dialogService;
+            _notification = notificationService;
             _syncService = SyncService.GetInstance(notificationService);
 
             // Subscribe to SyncService property changes so UI is immediately refreshed
@@ -299,25 +304,7 @@ namespace SyncUI.SyncView
             });
 
             // Toggle/Close button command
-            CancelAddModeCommand = new RelayCommandNew(_ => 
-            {
-                // Return to previous state
-                IsApiKeyEnabled = false;
-                if (_syncService.VerifiedApiKey)
-                {
-                    VerifiedApiKey = true;
-                    IsDropDownEnabled = true;
-                    IsVerifyButtonEnabled = false;
-                    CheckButtonImageSource = "/Assets/check-rwlink.png";
-                }
-                else
-                {
-                    VerifiedApiKey = false;
-                    IsDropDownEnabled = false;
-                    IsVerifyButtonEnabled = true;
-                    CheckButtonImageSource = "/Assets/checkedbox.png";
-                }
-            });
+            DeleteApiCommand = new RelayCommandNew(_ => RemoveApiKey(apiKey));
 
             // Browse Folder command
             BrowseFolderCommand = new RelayCommandNew(_ => BrowseFolder());
@@ -396,6 +383,20 @@ namespace SyncUI.SyncView
             Debug.WriteLine("Selected Merchant Id => " + SelectedMerchantId);
             Debug.WriteLine("Selected Store => " + SelectedStore);
             _syncService.DataSync(apikey, SelectedMerchantId, SelectedStore);
+        }
+
+        private void RemoveApiKey(string apikey)
+        {
+            _notification.ShowInfoLog($"Removing {SelectedMerchantId} ", this.GetType());
+            MessageBoxResult result = _dialogService != null
+                ? _dialogService.ShowConfirmation($"Do you want to remove the {SelectedMerchantId} key?", "Confirm Remove")
+                : MessageBox.Show("Are you sure you want to remove the API key?", "Confirm Remove", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                Debug.WriteLine($"Deleting {apikey} Api key button clicked ");
+                _syncService.RemoveApiKey(apikey);
+            }
         }
     }
 }

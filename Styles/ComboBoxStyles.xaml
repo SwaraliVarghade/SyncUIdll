@@ -37,7 +37,7 @@
                                 Focusable="False"
                                 IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}">
 
-                                    <Border Background="Transparent">
+                                    <Border Background="Transparent" Cursor="Hand">
 
                                         <Image Source="/Assets/dropdown.png"
                                                Height="12"

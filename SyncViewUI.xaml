@@ -117,7 +117,7 @@
                             Background="Transparent"
                             BorderThickness="1"
                             Margin="-10,5,-150,4"
-                            Command="{Binding CancelAddModeCommand}">
+                            Command="{Binding DeleteApiCommand}">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}"
@@ -829,7 +829,7 @@
 
                     <StackPanel>
 
-                        <TextBlock Text="Image Sync" Style="{StaticResource Bodylarge}"/>
+                        <TextBlock Text="Image Sync" Style="{StaticResource Bodylarge}" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Left"
