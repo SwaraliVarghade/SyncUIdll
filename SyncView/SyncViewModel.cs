@@ -166,13 +166,48 @@ namespace SyncUI.SyncView
                 OnPropertyChanged();
             }
         }
-
-        public string SelectedAutoDataDelay
+        public bool MakeSubFolderOnS3
         {
-            get => _syncService.SelectedAutoDataDelay;
+            get => _syncService.MakeSubFolderOnS3;
             set
             {
-                _syncService.SelectedAutoDataDelay = value;
+                _syncService.MakeSubFolderOnS3 = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool ReplaceImages
+        {
+            get => _syncService.ReplaceImages;
+            set
+            {
+                _syncService.ReplaceImages = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool PushToServer
+        {
+            get => _syncService.PushToServer;
+            set
+            {
+                _syncService.PushToServer = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool IsLocal
+        {
+            get => _syncService.IsLocal;
+            set
+            {
+                _syncService.IsLocal = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool IsFTP
+        {
+            get => _syncService.IsFTP;
+            set
+            {
+                _syncService.IsFTP = value;
                 OnPropertyChanged();
             }
         }

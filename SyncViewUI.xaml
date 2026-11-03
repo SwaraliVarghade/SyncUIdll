@@ -187,8 +187,8 @@
                                VerticalAlignment="Center"/>
                 </Grid>
             </Border>
-
-            <StackPanel Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+            <!-- Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}-->
+            <StackPanel>
                 <Border BorderBrush="#424242"
                     Padding="10"
                     BorderThickness="0,1, 0, 0"
@@ -200,7 +200,7 @@
                             FontSize="{StaticResource BodyMedium}"
                             Foreground="{StaticResource PrimaryTextColor}"/>
                         <CheckBox Content="Push stocktake to server"
-                                  IsChecked="False"
+                                  IsChecked="{Binding PushToServer}"
                                   Foreground="{StaticResource PrimaryTextColor}"
                                   FontFamily="{StaticResource PrimaryFont}"
                                   FontSize="{StaticResource BodySmall}"
@@ -450,6 +450,7 @@
                            VerticalAlignment="Center"/>
 
                             <TextBox 
+                                Text="{Binding DescrpFeild}"
                              BorderBrush="#424242"    
                              Background="Transparent"
                              Foreground="White"
@@ -836,6 +837,7 @@
                         Margin="0,8">
                             <!-- Local File -->
                             <RadioButton Content="Local File"
+                                         IsChecked="{Binding IsLocal}"
                              GroupName="ImageSyncType"
                              FontSize="{StaticResource BodySmall}"
                              Margin="0,0,18,0">
@@ -854,6 +856,7 @@
 
                             <!-- FTP -->
                             <RadioButton Content="FTP"
+                                         IsChecked="{Binding IsFTP}"
                              GroupName="FileType"
                              FontSize="{StaticResource BodySmall}"
                              Margin="0,0,18,0">
@@ -886,20 +889,19 @@
                         </StackPanel>
                         <StackPanel>
                             <TextBlock 
-                                Text="Image Up
-                                "
+                                Text="Image Upload"
                                 FontFamily="{StaticResource PrimaryFont}"
                                 FontSize="{StaticResource BodyMedium}"
                                 Foreground="{StaticResource PrimaryTextColor}"/>
                             <CheckBox Content="Replace images on server"
-                                  IsChecked="False"
+                                  IsChecked="{Binding ReplaceImages}"
                                   Foreground="{StaticResource PrimaryTextColor}"
                                   FontFamily="{StaticResource PrimaryFont}"
                                   FontSize="{StaticResource BodySmall}"
                                   Style="{StaticResource ModernCheckBox}"
                                   Margin="5,10,0,0"/>
                             <CheckBox Content="Make sub folder on S3"
-                                  IsChecked="False"
+                                  IsChecked="{Binding MakeSubFolderOnS3}"
                                   Foreground="{StaticResource PrimaryTextColor}"
                                   FontFamily="{StaticResource PrimaryFont}"
                                   FontSize="{StaticResource BodySmall}"
