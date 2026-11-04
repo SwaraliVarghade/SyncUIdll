@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Controls\IconStyle.xaml.cs">
       <DependentUpon>IconStyle.xaml</DependentUpon>
     </Compile>
@@ -64,7 +65,7 @@
       <DependentUpon>SyncViewUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="SyncView\SyncViewModel.cs" />
-    <Page Include="Controls\IconStyle.xaml">
+        <Page Include="Controls\IconStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

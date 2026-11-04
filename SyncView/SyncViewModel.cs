@@ -136,6 +136,14 @@ namespace SyncUI.SyncView
                 OnPropertyChanged(); 
             }
         }
+        public string DecryptionKey 
+        {
+            get => _syncService.DecryptionKey;
+            set { 
+                _syncService.DecryptionKey = value; 
+                OnPropertyChanged(); 
+            }
+        }
 
         public bool EnableWatcher
         {
@@ -156,22 +164,21 @@ namespace SyncUI.SyncView
                 OnPropertyChanged();
             }
         }
-
         public bool AutoSyncImg
         {
             get => _syncService.AutoSyncImg;
             set
             {
                 _syncService.AutoSyncImg = value;
-                OnPropertyChanged();
+                OnProper5tyChanged();
             }
         }
-        public bool MakeSubFolderOnS3
+        public bool SubFolderOnS3
         {
-            get => _syncService.MakeSubFolderOnS3;
+            get => _syncService.SubFolderOnS3;
             set
             {
-                _syncService.MakeSubFolderOnS3 = value;
+                _syncService.SubFolderOnS3 = value;
                 OnPropertyChanged();
             }
         }

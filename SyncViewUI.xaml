@@ -187,8 +187,8 @@
                                VerticalAlignment="Center"/>
                 </Grid>
             </Border>
-            <!-- Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}-->
-            <StackPanel>
+            <!---->
+            <StackPanel Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                 <Border BorderBrush="#424242"
                     Padding="10"
                     BorderThickness="0,1, 0, 0"
@@ -360,7 +360,7 @@
 
                             <RadioButton x:Name="FileRadioButton"
                                      Content="File"
-                                         IsChecked="True"
+                                     IsChecked="True"
                                      GroupName="DataSync"
                                      FontSize="{StaticResource BodySmall}"
                                      Margin="0,0,18,0">
@@ -450,11 +450,16 @@
                            VerticalAlignment="Center"/>
 
                             <TextBox 
-                                Text="{Binding DescrpFeild}"
-                             BorderBrush="#424242"    
-                             Background="Transparent"
-                             Foreground="White"
-                             Height="25" Grid.ColumnSpan="2" Margin="125,4,0,4"/>
+                                Text="{Binding DecryptionKey}"
+                                FontFamily="{StaticResource PrimaryFont}"
+                                FontSize="{StaticResource BodySmall}"
+                                Foreground="{StaticResource PrimaryTextColor}"
+                                BorderBrush="#424242"    
+                                Background="Transparent"
+                                Padding="0,4,0,0"
+                                Height="25" 
+                                Grid.ColumnSpan="2" 
+                                Margin="125,4,0,4"/>
                         </Grid>
 
                     </StackPanel>
@@ -901,7 +906,7 @@
                                   Style="{StaticResource ModernCheckBox}"
                                   Margin="5,10,0,0"/>
                             <CheckBox Content="Make sub folder on S3"
-                                  IsChecked="{Binding MakeSubFolderOnS3}"
+                                  IsChecked="{Binding SubFolderOnS3}"
                                   Foreground="{StaticResource PrimaryTextColor}"
                                   FontFamily="{StaticResource PrimaryFont}"
                                   FontSize="{StaticResource BodySmall}"
@@ -912,6 +917,7 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="35"/>
+                                <RowDefinition Height="34"/>
                                 <RowDefinition Height="34"/>
                             </Grid.RowDefinitions>
 
@@ -961,6 +967,30 @@
                                         Command="{Binding BrowseFolderCommand}"
                                         Background="Transparent"
                                         Foreground="{StaticResource PrimaryTextColor}"/>
+                            </Grid>
+                            <Grid Grid.Row="2" Grid.Column="1">
+                                <Border
+                                    Padding="10, 0, 0, 0"
+                                    Margin="0">     
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="85"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button
+                                           Grid.Column="1"
+                                            Width="115"
+                                            Height="30"
+                                                HorizontalAlignment="Right"
+                                            Style="{StaticResource BlueButton}">
+                                            <controls:IconStyle
+                                                IconSource="/Assets/resync-save-rwlink.png"
+                                                ButtonText="Image Sync"/>        
+                                            <!--Save &amp; -->
+                                        </Button>
+                                    </Grid>
+                                </Border>
+
                             </Grid>
                         </Grid>
                     </StackPanel>
