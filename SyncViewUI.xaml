@@ -187,8 +187,8 @@
                                VerticalAlignment="Center"/>
                 </Grid>
             </Border>
-            <!---->
-            <StackPanel Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+            <!--  Visibility="{Binding VerifiedApiKey, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"-->
+            <StackPanel>
                 <Border BorderBrush="#424242"
                     Padding="10"
                     BorderThickness="0,1, 0, 0"
@@ -319,7 +319,8 @@
                                            FontSize="{StaticResource BodySmall}"
                                            VerticalAlignment="Center"
                                            Grid.Column="3"
-                                           Margin="20,2,0,0">        
+                                           Margin="20,2,0,0"
+                                           IsEnabled="False">        
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="IsEnabled" Value="True"/>
@@ -360,14 +361,13 @@
 
                             <RadioButton x:Name="FileRadioButton"
                                      Content="File"
-                                     IsChecked="True"
                                      GroupName="DataSync"
+                                     IsChecked="{Binding IsFileChecked, Mode=TwoWay}"
                                      FontSize="{StaticResource BodySmall}"
                                      Margin="0,0,18,0">
                                 <RadioButton.Style>
                                     <Style TargetType="RadioButton"
                                     BasedOn="{StaticResource ModernRadioButton}">
-                                        <Setter Property="IsChecked" Value="False"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding DataUploadType}" Value="File">
                                                 <Setter Property="IsChecked" Value="True"/>
@@ -380,12 +380,12 @@
                             <RadioButton x:Name="DatabaseRadioButton"
                                      Content="Database"
                                      GroupName="DataSync"
+                                     IsChecked="{Binding IsDatabaseChecked, Mode=TwoWay}"
                                      FontSize="{StaticResource BodySmall}"
                                      Margin="0,0,18,0">
                                 <RadioButton.Style>
                                     <Style TargetType="RadioButton"
                                     BasedOn="{StaticResource ModernRadioButton}">
-                                        <Setter Property="IsChecked" Value="False"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding DataUploadType}" Value="Database">
                                                 <Setter Property="IsChecked" Value="True"/>
@@ -399,13 +399,16 @@
                                      Content="Webservice"
                                      FontSize="{StaticResource BodySmall}"
                                      GroupName="DataSync"
+                                     IsChecked="{Binding IsWebServiceChecked, Mode=TwoWay}"
                                      Margin="0,0,18,0">
                                 <RadioButton.Style>
                                     <Style TargetType="RadioButton"
                                     BasedOn="{StaticResource ModernRadioButton}">
-                                        <Setter Property="IsChecked" Value="False"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding DataUploadType}" Value="Webservice">
+                                                <Setter Property="IsChecked" Value="True"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding DataUploadType}" Value="Server">
                                                 <Setter Property="IsChecked" Value="True"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -845,6 +848,7 @@
                                          IsChecked="{Binding IsLocal}"
                              GroupName="ImageSyncType"
                              FontSize="{StaticResource BodySmall}"
+                                         IsEnabled="False"
                              Margin="0,0,18,0">
                                 <RadioButton.Style>
                                     <Style TargetType="RadioButton"
@@ -862,6 +866,7 @@
                             <!-- FTP -->
                             <RadioButton Content="FTP"
                                          IsChecked="{Binding IsFTP}"
+                                         IsEnabled="False"
                              GroupName="FileType"
                              FontSize="{StaticResource BodySmall}"
                              Margin="0,0,18,0">
@@ -956,7 +961,7 @@
                                          FontSize="{StaticResource BodySmall}"
                                          Padding="0,4,0,0"
                                          VerticalContentAlignment="Center"
-                                         Text="{Binding FileFolderPath, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="210"/>
+                                         Text="{Binding ImageFolderPath, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="210"/>
                                 <!-- Browse button -->
                                 <Button Grid.Column="1"
                                         Width="25"
@@ -964,7 +969,7 @@
                                         Margin="0,0,0,0"
                                         Content="..."
                                         BorderBrush="#424242"
-                                        Command="{Binding BrowseFolderCommand}"
+                                        Command="{Binding BrowseImageFolderCommand}"
                                         Background="Transparent"
                                         Foreground="{StaticResource PrimaryTextColor}"/>
                             </Grid>
@@ -990,7 +995,6 @@
                                         </Button>
                                     </Grid>
                                 </Border>
-
                             </Grid>
                         </Grid>
                     </StackPanel>

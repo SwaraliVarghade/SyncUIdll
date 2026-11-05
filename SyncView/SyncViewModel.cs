@@ -32,6 +32,8 @@ namespace SyncUI.SyncView
         public ICommand EnableAddModeCommand { get; }
         public ICommand DeleteApiCommand { get; }
         public ICommand BrowseFolderCommand { get; }
+        public ICommand BrowseDataFolderCommand { get; }
+        public ICommand BrowseImageFolderCommand { get; }
         public ICommand DataSync { get; }
 
         private string _checkButtonImageSource = "/Assets/checkedbox.png";
@@ -60,6 +62,16 @@ namespace SyncUI.SyncView
             }
         }
 
+        public string ImageFolderPath
+        {
+            get => _syncService.ImageFolderPath;
+            set { 
+                _syncService.ImageFolderPath = value;
+                Debug.WriteLine("ImageFolderPath => " + _syncService.ImageFolderPath);
+                OnPropertyChanged(nameof(ImageFolderPath)); 
+            }
+        }
+
         public string FileName
         {
             get => _syncService.FileName;
@@ -83,25 +95,66 @@ namespace SyncUI.SyncView
             }
         }
 
-        private bool _isFileChecked = true;
+        public string DataUploadType
+        {
+            get => _syncService.DataUploadType;
+            set
+            {
+                if (_syncService.DataUploadType != value)
+                {
+                    _syncService.DataUploadType = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsFileChecked));
+                    OnPropertyChanged(nameof(IsDatabaseChecked));
+                    OnPropertyChanged(nameof(IsWebServiceChecked));
+                }
+            }
+        }
+
         public bool IsFileChecked
         {
-            get => _isFileChecked;
-            set { _isFileChecked = value; OnPropertyChanged(); }
+            get => string.Equals(DataUploadType, "File", StringComparison.OrdinalIgnoreCase);
+            set
+            {
+                if (value)
+                {
+                    DataUploadType = "File";
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsDatabaseChecked));
+                    OnPropertyChanged(nameof(IsWebServiceChecked));
+                }
+            }
         }
 
-        private bool _isDatabaseChecked = false;
         public bool IsDatabaseChecked
         {
-            get => _isDatabaseChecked;
-            set { _isDatabaseChecked = value; OnPropertyChanged(); }
+            get => string.Equals(DataUploadType, "Database", StringComparison.OrdinalIgnoreCase);
+            set
+            {
+                if (value)
+                {
+                    DataUploadType = "Database";
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsFileChecked));
+                    OnPropertyChanged(nameof(IsWebServiceChecked));
+                }
+            }
         }
 
-        private bool _isWebServiceChecked = false;
         public bool IsWebServiceChecked
         {
-            get => _isWebServiceChecked;
-            set { _isWebServiceChecked = value; OnPropertyChanged(); }
+            get => string.Equals(DataUploadType, "Server", StringComparison.OrdinalIgnoreCase) 
+                || string.Equals(DataUploadType, "Webservice", StringComparison.OrdinalIgnoreCase);
+            set
+            {
+                if (value)
+                {
+                    DataUploadType = "Server";
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsFileChecked));
+                    OnPropertyChanged(nameof(IsDatabaseChecked));
+                }
+            }
         }
 
         public bool IsDropDownEnabled
@@ -170,7 +223,7 @@ namespace SyncUI.SyncView
             set
             {
                 _syncService.AutoSyncImg = value;
-                OnProper5tyChanged();
+                OnPropertyChanged();
             }
         }
         public bool SubFolderOnS3
@@ -315,6 +368,24 @@ namespace SyncUI.SyncView
                         }
                     }
                 }
+
+                if (args.PropertyName == nameof(SyncService.DataUploadType))
+                {
+                    OnPropertyChanged(nameof(DataUploadType));
+                    OnPropertyChanged(nameof(IsFileChecked));
+                    OnPropertyChanged(nameof(IsDatabaseChecked));
+                    OnPropertyChanged(nameof(IsWebServiceChecked));
+                }
+
+                if (args.PropertyName == nameof(SyncService.FileFolderPath))
+                {
+                    OnPropertyChanged(nameof(FileFolderPath));
+                }
+
+                if (args.PropertyName == nameof(SyncService.ImageFolderPath))
+                {
+                    OnPropertyChanged(nameof(ImageFolderPath));
+                }
             };
 
             // Check if already verified from existing settings
@@ -348,8 +419,10 @@ namespace SyncUI.SyncView
             // Toggle/Close button command
             DeleteApiCommand = new RelayCommandNew(_ => RemoveApiKey(apiKey));
 
-            // Browse Folder command
+            // Browse Folder commands
             BrowseFolderCommand = new RelayCommandNew(_ => BrowseFolder());
+            BrowseDataFolderCommand = BrowseFolderCommand;
+            BrowseImageFolderCommand = new RelayCommandNew(_ => BrowseImageFolder());
             DataSync = new RelayCommandNew(_ => StartDataSync(apiKey));
         }
 
@@ -357,7 +430,7 @@ namespace SyncUI.SyncView
         {
             using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
-                dialog.Description = "Select a folder for syncing";
+                dialog.Description = "Select a folder for data syncing";
                 dialog.ShowNewFolderButton = true;
                 if (!string.IsNullOrEmpty(FileFolderPath))
                 {
@@ -367,6 +440,24 @@ namespace SyncUI.SyncView
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     FileFolderPath = dialog.SelectedPath;
+                }
+            }
+        }
+
+        private void BrowseImageFolder()
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                dialog.Description = "Select a folder for image syncing";
+                dialog.ShowNewFolderButton = true;
+                if (!string.IsNullOrEmpty(ImageFolderPath))
+                {
+                    dialog.SelectedPath = ImageFolderPath;
+                }
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    ImageFolderPath = dialog.SelectedPath;
                 }
             }
         }
