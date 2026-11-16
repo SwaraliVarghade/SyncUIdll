@@ -986,6 +986,7 @@
                                            Grid.Column="1"
                                             Width="115"
                                             Height="30"
+                                            Command="{Binding ImageSync}"
                                                 HorizontalAlignment="Right"
                                             Style="{StaticResource BlueButton}">
                                             <controls:IconStyle

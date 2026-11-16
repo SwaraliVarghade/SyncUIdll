@@ -35,6 +35,7 @@ namespace SyncUI.SyncView
         public ICommand BrowseDataFolderCommand { get; }
         public ICommand BrowseImageFolderCommand { get; }
         public ICommand DataSync { get; }
+        public ICommand ImageSync { get; }
 
         private string _checkButtonImageSource = "/Assets/checkedbox.png";
         public string CheckButtonImageSource
@@ -424,6 +425,7 @@ namespace SyncUI.SyncView
             BrowseDataFolderCommand = BrowseFolderCommand;
             BrowseImageFolderCommand = new RelayCommandNew(_ => BrowseImageFolder());
             DataSync = new RelayCommandNew(_ => StartDataSync(apiKey));
+            ImageSync = new RelayCommandNew(_ => StartImageSync(apiKey));
         }
 
         private void BrowseFolder()
@@ -530,6 +532,12 @@ namespace SyncUI.SyncView
                 Debug.WriteLine($"Deleting {apikey} Api key button clicked ");
                 _syncService.RemoveApiKey(apikey);
             }
+        }
+
+        private void StartImageSync(string apikey, string imageFolderPath = "")
+        {
+            _notification.ShowInfoLog($"Selected Merchant Id => {SelectedMerchantId}, Selected Store => {SelectedStore}", this.GetType());
+            _syncService.ImageSyncPreProcedure(apikey, SelectedMerchantId, SelectedStore);
         }
     }
 }
