@@ -68,8 +68,39 @@ namespace SyncUI.SyncView
             get => _syncService.ImageFolderPath;
             set { 
                 _syncService.ImageFolderPath = value;
-                Debug.WriteLine("ImageFolderPath => " + _syncService.ImageFolderPath);
                 OnPropertyChanged(nameof(ImageFolderPath)); 
+            }
+        }
+        public string Port
+        {
+            get => _syncService.HostPort;
+            set { 
+                _syncService.HostPort = value;
+                OnPropertyChanged(nameof(Port)); 
+            }
+        }
+        public string Username
+        {
+            get => _syncService.UserName;
+            set { 
+                _syncService.UserName = value;
+                OnPropertyChanged(nameof(Username)); 
+            }
+        }
+        public string Password
+        {
+            get => _syncService.Password;
+            set { 
+                _syncService.Password = value;
+                OnPropertyChanged(nameof(Password)); 
+            }
+        }
+        public string Path
+        {
+            get => _syncService.Path;
+            set { 
+                _syncService.Path = value;
+                OnPropertyChanged(nameof(Path)); 
             }
         }
 
@@ -259,8 +290,15 @@ namespace SyncUI.SyncView
             get => _syncService.IsLocal;
             set
             {
-                _syncService.IsLocal = value;
-                OnPropertyChanged();
+                if (_syncService.IsLocal != value)
+                {
+                    _syncService.IsLocal = value;
+                    OnPropertyChanged();
+                    if (value)
+                    {
+                        IsFTP = false;
+                    }
+                }
             }
         }
         public bool IsFTP
@@ -268,8 +306,15 @@ namespace SyncUI.SyncView
             get => _syncService.IsFTP;
             set
             {
-                _syncService.IsFTP = value;
-                OnPropertyChanged();
+                if (_syncService.IsFTP != value)
+                {
+                    _syncService.IsFTP = value;
+                    OnPropertyChanged();
+                    if (value)
+                    {
+                        IsLocal = false;
+                    }
+                }
             }
         }
 
@@ -387,7 +432,42 @@ namespace SyncUI.SyncView
                 {
                     OnPropertyChanged(nameof(ImageFolderPath));
                 }
+
+                if (args.PropertyName == nameof(SyncService.HostPort))
+                {
+                    OnPropertyChanged(nameof(Port));
+                }
+
+                if (args.PropertyName == nameof(SyncService.UserName))
+                {
+                    OnPropertyChanged(nameof(Username));
+                }
+
+                if (args.PropertyName == nameof(SyncService.Password))
+                {
+                    OnPropertyChanged(nameof(Password));
+                }
+
+                if (args.PropertyName == nameof(SyncService.Path))
+                {
+                    OnPropertyChanged(nameof(Path));
+                }
+
+                if (args.PropertyName == nameof(SyncService.IsLocal))
+                {
+                    OnPropertyChanged(nameof(IsLocal));
+                }
+
+                if (args.PropertyName == nameof(SyncService.IsFTP))
+                {
+                    OnPropertyChanged(nameof(IsFTP));
+                }
             };
+
+            if (!IsLocal && !IsFTP)
+            {
+                IsLocal = true;
+            }
 
             // Check if already verified from existing settings
             if (_syncService.VerifiedApiKey)

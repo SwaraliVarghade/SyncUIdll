@@ -844,18 +844,17 @@
                         HorizontalAlignment="Left"
                         Margin="0,8">
                             <!-- Local File -->
-                            <RadioButton Content="Local File"
-                                         IsChecked="{Binding IsLocal}"
-                             GroupName="ImageSyncType"
-                             FontSize="{StaticResource BodySmall}"
-                                         IsEnabled="False"
-                             Margin="0,0,18,0">
+                            <RadioButton x:Name="LocalFileRadioButton"
+                                         Content="Local File"
+                                         IsChecked="{Binding IsLocal, Mode=TwoWay}"
+                                         GroupName="ImageSyncType"
+                                         FontSize="{StaticResource BodySmall}"
+                                         Margin="0,0,18,0">
                                 <RadioButton.Style>
                                     <Style TargetType="RadioButton"
                                         BasedOn="{StaticResource ModernRadioButton}">
-                                        <Setter Property="IsChecked" Value="False"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ImageSyncType}" Value="Local File">
+                                            <DataTrigger Binding="{Binding IsLocal}" Value="True">
                                                 <Setter Property="IsChecked" Value="True"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -864,18 +863,16 @@
                             </RadioButton>
 
                             <!-- FTP -->
-                            <RadioButton Content="FTP"
-                                         IsChecked="{Binding IsFTP}"
-                                         IsEnabled="False"
-                             GroupName="FileType"
-                             FontSize="{StaticResource BodySmall}"
-                             Margin="0,0,18,0">
+                            <RadioButton x:Name="FtpRadioButton"
+                                         Content="FTP"
+                                         IsChecked="{Binding IsFTP, Mode=TwoWay}"
+                                         GroupName="ImageSyncType"
+                                         FontSize="{StaticResource BodySmall}"
+                                         Margin="0,0,18,0">
                                 <RadioButton.Style>
                                     <Style TargetType="RadioButton" BasedOn="{StaticResource ModernRadioButton}">
-                                        <Setter Property="IsChecked" Value="False"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ImageSyncType}"
-                                             Value="FTP">
+                                            <DataTrigger Binding="{Binding IsFTP}" Value="True">
                                                 <Setter Property="IsChecked" Value="True"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -919,10 +916,24 @@
                                   Margin="5,10,0,0"/>
                         </StackPanel>
 
+                        <!-- File Details (Local File) -->
                         <Grid>
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=LocalFileRadioButton}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsLocal}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="35"/>
-                                <RowDefinition Height="34"/>
                                 <RowDefinition Height="34"/>
                             </Grid.RowDefinitions>
 
@@ -932,7 +943,6 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Text="File Details"
-                                       
                                    FontFamily="{StaticResource PrimaryFont}"
                                     FontSize="{StaticResource BodyMedium}"
                                     Foreground="{StaticResource PrimaryTextColor}"
@@ -964,40 +974,168 @@
                                          Text="{Binding ImageFolderPath, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="210"/>
                                 <!-- Browse button -->
                                 <Button Grid.Column="1"
-                                        Width="25"
-                                        Height="25"
-                                        Margin="0,0,0,0"
-                                        Content="..."
-                                        BorderBrush="#424242"
-                                        Command="{Binding BrowseImageFolderCommand}"
-                                        Background="Transparent"
-                                        Foreground="{StaticResource PrimaryTextColor}"/>
-                            </Grid>
-                            <Grid Grid.Row="2" Grid.Column="1">
-                                <Border
-                                    Padding="10, 0, 0, 0"
-                                    Margin="0">     
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="85"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Button
-                                           Grid.Column="1"
-                                            Width="115"
-                                            Height="30"
-                                            Command="{Binding ImageSync}"
-                                                HorizontalAlignment="Right"
-                                            Style="{StaticResource BlueButton}">
-                                            <controls:IconStyle
-                                                IconSource="/Assets/resync-save-rwlink.png"
-                                                ButtonText="Image Sync"/>        
-                                            <!--Save &amp; -->
-                                        </Button>
-                                    </Grid>
-                                </Border>
+                                         Width="25"
+                                         Height="25"
+                                         Margin="0,0,0,0"
+                                         Content="..."
+                                         BorderBrush="#424242"
+                                         Command="{Binding BrowseImageFolderCommand}"
+                                         Background="Transparent"
+                                         Foreground="{StaticResource PrimaryTextColor}"/>
                             </Grid>
                         </Grid>
+
+                        <!-- FTP Details -->
+                        <Grid>
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=FtpRadioButton}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsFTP}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="34"/>
+                                <RowDefinition Height="34"/>
+                                <RowDefinition Height="34"/>
+                                <RowDefinition Height="34"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="FTP Details"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="{StaticResource BodyMedium}"
+                                       Foreground="{StaticResource PrimaryTextColor}"
+                                       Grid.ColumnSpan="2" Margin="0,10,137,0"/>
+
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="0"
+                                       Foreground="{StaticResource PrimaryTextColor}"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="{StaticResource BodySmall}"
+                                       Text="Port"
+                                       VerticalAlignment="Center"/>
+
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="1"
+                                     Height="25"
+                                     Width="239"
+                                     HorizontalAlignment="Right"
+                                     Margin="5,4,0,4"
+                                     BorderBrush="#424242"
+                                     Background="Transparent"
+                                     Foreground="{StaticResource PrimaryTextColor}"
+                                     FontFamily="{StaticResource PrimaryFont}"
+                                     FontSize="{StaticResource BodySmall}"
+                                     Padding="0,4,0,0"
+                                     VerticalContentAlignment="Center"
+                                     Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Foreground="{StaticResource PrimaryTextColor}"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="{StaticResource BodySmall}"
+                                       Text="Username"
+                                       VerticalAlignment="Center"/>
+
+                            <TextBox Grid.Row="2"
+                                     Grid.Column="1"
+                                     Height="25"
+                                     Width="239"
+                                     HorizontalAlignment="Right"
+                                     Margin="5,4,0,4"
+                                     BorderBrush="#424242"
+                                     Background="Transparent"
+                                     Foreground="{StaticResource PrimaryTextColor}"
+                                     FontFamily="{StaticResource PrimaryFont}"
+                                     FontSize="{StaticResource BodySmall}"
+                                     Padding="0,4,0,0"
+                                     VerticalContentAlignment="Center"
+                                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <TextBlock Grid.Row="3"
+                                       Grid.Column="0"
+                                       Foreground="{StaticResource PrimaryTextColor}"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="{StaticResource BodySmall}"
+                                       Text="Password"
+                                       VerticalAlignment="Center"/>
+
+                            <TextBox Grid.Row="3"
+                                     Grid.Column="1"
+                                     Height="25"
+                                     Width="239"
+                                     HorizontalAlignment="Right"
+                                     Margin="5,4,0,4"
+                                     BorderBrush="#424242"
+                                     Background="Transparent"
+                                     Foreground="{StaticResource PrimaryTextColor}"
+                                     FontFamily="{StaticResource PrimaryFont}"
+                                     FontSize="{StaticResource BodySmall}"
+                                     Padding="0,4,0,0"
+                                     VerticalContentAlignment="Center"
+                                     Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <TextBlock Grid.Row="4"
+                                       Grid.Column="0"
+                                       Foreground="{StaticResource PrimaryTextColor}"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="{StaticResource BodySmall}"
+                                       Text="Path"
+                                       VerticalAlignment="Center"/>
+
+                            <TextBox Grid.Row="4"
+                                     Grid.Column="1"
+                                     Height="25"
+                                     Width="239"
+                                     HorizontalAlignment="Right"
+                                     Margin="5,4,0,4"
+                                     BorderBrush="#424242"
+                                     Background="Transparent"
+                                     Foreground="{StaticResource PrimaryTextColor}"
+                                     FontFamily="{StaticResource PrimaryFont}"
+                                     FontSize="{StaticResource BodySmall}"
+                                     Padding="0,4,0,0"
+                                     VerticalContentAlignment="Center"
+                                     Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+
+                        <!-- Image Sync Button -->
+                        <Border
+                            Padding="10, 8, 0, 0"
+                            Margin="0">     
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="85"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button
+                                   Grid.Column="1"
+                                    Width="115"
+                                    Height="30"
+                                    Command="{Binding ImageSync}"
+                                        HorizontalAlignment="Right"
+                                    Style="{StaticResource BlueButton}">
+                                    <controls:IconStyle
+                                        IconSource="/Assets/resync-save-rwlink.png"
+                                        ButtonText="Image Sync"/>        
+                                    <!--Save &amp; -->
+                                </Button>
+                            </Grid>
+                        </Border>
                     </StackPanel>
                 </Border>
             </StackPanel>
