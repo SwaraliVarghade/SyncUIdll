@@ -71,6 +71,15 @@ namespace SyncUI.SyncView
                 OnPropertyChanged(nameof(ImageFolderPath)); 
             }
         }
+
+        public string ServerHost
+        {
+            get => _syncService.ServerHost;
+            set { 
+                _syncService.ServerHost = value;
+                OnPropertyChanged(nameof(ServerHost)); 
+            }
+        }
         public string Port
         {
             get => _syncService.HostPort;
@@ -317,6 +326,22 @@ namespace SyncUI.SyncView
                 }
             }
         }
+        public bool IsGDrive
+        {
+            get => _syncService.IsGDrive;
+            set
+            {
+                if (_syncService.IsGDrive != value)
+                {
+                    _syncService.IsGDrive = value;
+                    OnPropertyChanged();
+                    if (value)
+                    {
+                        IsLocal = false;
+                    }
+                }
+            }
+        }
 
         private ObservableCollection<string> _startDelay = new ObservableCollection<string> {"5", "10", "15", "20", "30", "60", "120", "180", "240", "480" };
         public ObservableCollection<string> StartDelay => _startDelay;
@@ -437,6 +462,10 @@ namespace SyncUI.SyncView
                 {
                     OnPropertyChanged(nameof(Port));
                 }
+                if (args.PropertyName == nameof(SyncService.ServerHost))
+                {
+                    OnPropertyChanged(nameof(ServerHost));
+                }
 
                 if (args.PropertyName == nameof(SyncService.UserName))
                 {
@@ -461,6 +490,10 @@ namespace SyncUI.SyncView
                 if (args.PropertyName == nameof(SyncService.IsFTP))
                 {
                     OnPropertyChanged(nameof(IsFTP));
+                }
+                if(args.PropertyName == nameof(SyncService.IsGDrive))
+                {
+                    OnPropertyChanged(nameof(IsGDrive));
                 }
             };
 
