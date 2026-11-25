@@ -119,6 +119,38 @@ namespace SyncUI.SyncView
             set { _syncService.FileName = value; OnPropertyChanged(); }
         }
 
+        public string DBHost
+        {
+            get => _syncService.DBHost;
+            set { _syncService.DBHost = value; OnPropertyChanged(); }
+        }
+        public string DBPort
+        {
+            get => _syncService.DBPort;
+            set { _syncService.DBPort = value; OnPropertyChanged(); }
+        }
+        public string DBUsername
+        {
+            get => _syncService.DBUsername;
+            set { _syncService.DBUsername = value; OnPropertyChanged(); }
+        }
+        public string DBPassword
+        {
+            get => _syncService.DBPassword;
+            set { _syncService.DBPassword = value; OnPropertyChanged(); }
+        }
+        public string DBStoreCode
+        {
+            get => _syncService.DBStoreCode;
+            set { _syncService.DBStoreCode = value; OnPropertyChanged(); }
+        }
+        public string DBCustomFeild
+        {
+            get => _syncService.DBCustomFeild;
+            set { _syncService.DBCustomFeild = value; OnPropertyChanged(); }
+        }
+
+
         private bool _isApiKeyEnabled = false;
         public bool IsApiKeyEnabled
         {
@@ -379,9 +411,9 @@ namespace SyncUI.SyncView
         private string _selectedStore;
         public string SelectedStore
         {
-            get => _selectedStore;
+            get => !string.IsNullOrEmpty(_syncService.SelectedStore) ? _syncService.SelectedStore : _selectedStore;
             set { 
-                if (_selectedStore != value)
+                if (_selectedStore != value || _syncService.SelectedStore != value)
                 {
                     _selectedStore = value; 
                     OnPropertyChanged(); 
@@ -428,14 +460,25 @@ namespace SyncUI.SyncView
                     }
                 }
 
+                if (args.PropertyName == nameof(SyncService.SelectedStore))
+                {
+                    _selectedStore = _syncService.SelectedStore;
+                    OnPropertyChanged(nameof(SelectedStore));
+                }
+
                 if (args.PropertyName == nameof(SyncService.StoreNames))
                 {
                     OnPropertyChanged(nameof(StoreNames));
                     if (StoreNames != null && StoreNames.Count > 0)
                     {
-                        if (string.IsNullOrEmpty(SelectedStore) || !StoreNames.Contains(SelectedStore))
+                        string current = !string.IsNullOrEmpty(_syncService.SelectedStore) ? _syncService.SelectedStore : SelectedStore;
+                        if (string.IsNullOrEmpty(current) || !StoreNames.Contains(current))
                         {
                             SelectedStore = StoreNames[0];
+                        }
+                        else
+                        {
+                            SelectedStore = current;
                         }
                     }
                 }
@@ -495,6 +538,85 @@ namespace SyncUI.SyncView
                 {
                     OnPropertyChanged(nameof(IsGDrive));
                 }
+
+                if (args.PropertyName == nameof(SyncService.isReplaceDataOnServer))
+                {
+                    OnPropertyChanged(nameof(isReplaceDataOnServer));
+                }
+
+                if (args.PropertyName == nameof(SyncService.isManualSync))
+                {
+                    OnPropertyChanged(nameof(isManualSync));
+                }
+
+                if (args.PropertyName == nameof(SyncService.isRFIDdecryption))
+                {
+                    OnPropertyChanged(nameof(isRFIDdecryption));
+                }
+
+                if (args.PropertyName == nameof(SyncService.DecryptionKey))
+                {
+                    OnPropertyChanged(nameof(DecryptionKey));
+                }
+
+                if (args.PropertyName == nameof(SyncService.EnableFileWatcher) || args.PropertyName == "EnableWatcher")
+                {
+                    OnPropertyChanged(nameof(EnableWatcher));
+                }
+
+                if (args.PropertyName == nameof(SyncService.AutoSyncData))
+                {
+                    OnPropertyChanged(nameof(AutoSyncData));
+                }
+
+                if (args.PropertyName == nameof(SyncService.AutoSyncImg))
+                {
+                    OnPropertyChanged(nameof(AutoSyncImg));
+                }
+
+                if (args.PropertyName == nameof(SyncService.SubFolderOnS3))
+                {
+                    OnPropertyChanged(nameof(SubFolderOnS3));
+                }
+
+                if (args.PropertyName == nameof(SyncService.ReplaceImages))
+                {
+                    OnPropertyChanged(nameof(ReplaceImages));
+                }
+
+                if (args.PropertyName == nameof(SyncService.PushToServer))
+                {
+                    OnPropertyChanged(nameof(PushToServer));
+                }
+
+                if (args.PropertyName == nameof(SyncService.FileName))
+                {
+                    OnPropertyChanged(nameof(FileName));
+                }
+                if (args.PropertyName == nameof(SyncService.DBHost))
+                {
+                    OnPropertyChanged(nameof(DBHost));
+                }
+                if (args.PropertyName == nameof(SyncService.DBUsername))
+                {
+                    OnPropertyChanged(nameof(DBUsername));
+                }
+                if (args.PropertyName == nameof(SyncService.DBPort))
+                {
+                    OnPropertyChanged(nameof(DBPort));
+                }
+                if (args.PropertyName == nameof(SyncService.DBPassword))
+                {
+                    OnPropertyChanged(nameof(DBPassword));
+                }
+                if (args.PropertyName == nameof(SyncService.DBStoreCode))
+                {
+                    OnPropertyChanged(nameof(DBStoreCode));
+                }
+                if (args.PropertyName == nameof(SyncService.DBCustomFeild))
+                {
+                    OnPropertyChanged(nameof(DBCustomFeild));
+                }
             };
 
             if (!IsLocal && !IsFTP)
@@ -514,7 +636,8 @@ namespace SyncUI.SyncView
                 }
                 if (StoreNames != null && StoreNames.Count > 0)
                 {
-                    SelectedStore = StoreNames[0];
+                    string current = !string.IsNullOrEmpty(_syncService.SelectedStore) ? _syncService.SelectedStore : SelectedStore;
+                    SelectedStore = (!string.IsNullOrEmpty(current) && StoreNames.Contains(current)) ? current : StoreNames[0];
                 }
             }
 

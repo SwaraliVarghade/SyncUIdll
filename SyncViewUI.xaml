@@ -603,6 +603,7 @@
                                VerticalAlignment="Center"/>
 
                         <TextBox Grid.Row="1"
+                                 Text="{Binding DBHost}"
                              BorderBrush="#424242"
                             Background="Transparent"
                              Foreground="White"
@@ -616,6 +617,7 @@
                                VerticalAlignment="Center"/>
 
                         <TextBox Grid.Row="2"
+                                 Text="{Binding DBPort}"
                          BorderBrush="#424242"    
                          Background="Transparent"
                          Foreground="White"
@@ -629,6 +631,7 @@
                                VerticalAlignment="Center"/>
 
                         <TextBox Grid.Row="3"
+                                 Text="{Binding DBUsername}"
                          BorderBrush="#424242"    
                          Background="Transparent"
                          Foreground="White"
@@ -642,6 +645,7 @@
                                VerticalAlignment="Center"/>
 
                         <TextBox Grid.Row="4"
+                                 Text="{Binding DBPassword}"
                          BorderBrush="#424242"    
                          Background="Transparent"
                          Foreground="White"
@@ -654,6 +658,7 @@
                                VerticalAlignment="Center"/>
 
                         <TextBox Grid.Row="5"
+                                 Text="{Binding DBStoreCode}"
                          BorderBrush="#424242"    
                          Background="Transparent"
                          Foreground="White"
@@ -667,6 +672,7 @@
                                VerticalAlignment="Center"/>
 
                         <TextBox Grid.Row="6"
+                                 Text="{Binding DBCustomFeild}"
                          BorderBrush="#424242"    
                          Background="Transparent"
                          Foreground="White"
